@@ -22,7 +22,8 @@
 
         $result = $stmt->get_result();
 
-        echo "`$result->num_rows`";
+        var_dump($result);
+        echo '`'.$result->num_rows.'`';
         
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
