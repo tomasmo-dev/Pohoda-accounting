@@ -9,7 +9,7 @@
             'FROM system.qb_revenue_items i '.
                 'LEFT JOIN myfbo_cz_copy.dispatches d ON d.dispatch_ID = i.dispatch_ID AND d.ddel = 0 '.
             'WHERE business_unit = \'CZ\' '.
-                'AND MONTH(dispend) = \'?\' AND YEAR(dispend) = \'?\' '.
+                'AND MONTH(dispend) = ? AND YEAR(dispend) = ? '.
                 'AND i.item_type NOT IN (\'FX\', \'H\', \'X\', \'Z\') '.
                 'GROUP BY d.cust_ID, d.dispapt; ';
 
@@ -26,7 +26,7 @@
         $result = $stmt->get_result();
         echo 'stmt result';
 
-        echo $connection->error;
+        echo $stmt->error;
         
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
