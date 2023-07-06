@@ -13,6 +13,8 @@
                 AND i.item_type NOT IN ('FX', 'H', 'X', 'Z')
                 GROUP BY d.cust_ID, d.dispapt;";
 
+        echo $sql;
+
         $stmt = $connection->prepare($sql);
         $stmt->bind_param("ss", $month, $year);
 

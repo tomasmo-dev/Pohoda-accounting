@@ -51,6 +51,7 @@
         <?php
 
         if ($dateAssigned) {
+            echo 'var dump';
             var_dump(Get_UserIds_for_date($year, $month));
         }
         else{
