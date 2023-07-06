@@ -15,14 +15,16 @@
 
 
         $stmt = $connection->prepare($sql);
-        $stmt->bind_param("ss", $month, $year);
+        echo 'stmt prepared';
 
-        echo 'asd';
+        $stmt->bind_param("ss", $month, $year);
+        echo 'stmt binded';
+
         $stmt->execute();
-        echo 'dsa';
+        echo 'stmt executed';
 
         $result = $stmt->get_result();
-        echo 'fsa';
+        echo 'stmt result';
 
         echo $connection->error;
         
