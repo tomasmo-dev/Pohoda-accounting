@@ -32,7 +32,7 @@
     function Get_UserIds_for_date($year, $month){
         // returns array of user ids for given date
 
-        $CustIds = GetCustIds($year, $month, $GLOBALS['$dbconnect']);
+        $CustIds = GetCustIds($year, $month, $GLOBALS['dbconnect']);
 
         return $CustIds;
     }
