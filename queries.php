@@ -21,7 +21,7 @@
         $stmt->execute();
 
         $result = $stmt->get_result();
-
+        echo $result->num_rows;
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 array_push($CustIds, $row["cust_ID"]);
