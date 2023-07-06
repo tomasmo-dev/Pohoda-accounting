@@ -53,7 +53,12 @@
         <?php
 
         if ($dateAssigned) {
-            var_dump(Get_UserIds_for_date($year, $month));
+            $ids = Get_UserIds_for_date($year, $month);
+
+            foreach ($ids as $cust_id) {
+                echo $cust_id;
+                echo "<br>";
+            }
         }
         else{
             echo "no datum";
