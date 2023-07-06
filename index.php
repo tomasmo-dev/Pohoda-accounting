@@ -1,4 +1,10 @@
 <?php
+    // error reporting
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
+
     // excluded from git for security reasons
     // mainly contains $dbconnect variable
     // !!! REQUIRES CLOSING !!!
