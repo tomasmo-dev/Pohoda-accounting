@@ -17,9 +17,12 @@
         $stmt = $connection->prepare($sql);
         $stmt->bind_param("ss", $month, $year);
 
+        echo 'asd';
         $stmt->execute();
+        echo 'dsa';
 
         $result = $stmt->get_result();
+        echo 'fsa';
 
         echo $connection->error;
         
