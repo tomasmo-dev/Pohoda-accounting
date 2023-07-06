@@ -22,10 +22,6 @@
             $dateAssigned = false;
         }
     }
-?>
-
-<?php
-    // separate php section for function definitions
 
     function Get_UserIds_for_date($year, $month){
         // returns array of user ids for given date
