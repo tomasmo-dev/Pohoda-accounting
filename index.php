@@ -29,28 +29,33 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pohoda</title>
-</head>
-<body>
-    <form method="POST" action="">
-        <input type="month" name="date">
-        <input type="submit" value="Odeslat">
-    </form>
-    <br>
-    <?php
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pohoda</title>
+    </head>
+    <body>
+        <form method="POST" action="">
+            <input type="month" name="date">
+            <input type="submit" value="Odeslat">
+        </form>
+        <br>
+        <?php
 
-    if ($dateAssigned) {
-        var_dump(Get_UserIds_for_date($year, $month));
-    }
-    else{
-        echo "no datum";
-    }
+        if ($dateAssigned) {
+            var_dump(Get_UserIds_for_date($year, $month));
+        }
+        else{
+            echo "no datum";
+        }
 
-    ?>
-</body>
+        ?>
+        <script>
+            if ( window.history.replaceState ) {
+                window.history.replaceState( null, null, window.location.href );
+            }
+        </script>
+    </body>
 </html>
 
 <?php
