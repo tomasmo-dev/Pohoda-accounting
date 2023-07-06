@@ -13,22 +13,17 @@
                 'AND i.item_type NOT IN (\'FX\', \'H\', \'X\', \'Z\') '.
                 'GROUP BY d.cust_ID, d.dispapt; ';
 
-        echo 'sql prepared';
         $stmt = $connection->prepare($sql);
-        echo 'stmt prepared';
 
         $stmt->bind_param("ss", $month, $year);
-        echo 'stmt binded';
 
         $stmt->execute();
-        echo 'stmt executed';
 
         $result = $stmt->get_result();
-        echo 'stmt result';
         
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
-                array_push($CustIds, $row["cust_ID"]);
+                array_push($CustIds, strval($row["cust_ID"]));
             }
         }
 
