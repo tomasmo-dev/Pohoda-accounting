@@ -18,7 +18,9 @@
             $month = $date->format('m');
             $year = $date->format('Y');
         }
-        $dateAssigned = false;
+        else{
+            $dateAssigned = false;
+        }
     }
 ?>
 
