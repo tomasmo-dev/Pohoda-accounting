@@ -22,8 +22,7 @@
 
         $result = $stmt->get_result();
 
-        var_dump($result);
-        echo '`'.$result->num_rows.'`';
+        echo $connection->error;
         
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
