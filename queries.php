@@ -9,11 +9,10 @@
             'FROM system.qb_revenue_items i '.
                 'LEFT JOIN myfbo_cz_copy.dispatches d ON d.dispatch_ID = i.dispatch_ID AND d.ddel = 0 '.
             'WHERE business_unit = \'CZ\' '.
-                'AND MONTH(dispend) = ? AND YEAR(dispend) = ? '.
+                'AND MONTH(dispend) = \'?\' AND YEAR(dispend) = \'?\' '.
                 'AND i.item_type NOT IN (\'FX\', \'H\', \'X\', \'Z\') '.
                 'GROUP BY d.cust_ID, d.dispapt; ';
 
-        echo $sql;
 
         $stmt = $connection->prepare($sql);
         $stmt->bind_param("ss", $month, $year);
