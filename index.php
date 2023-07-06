@@ -10,10 +10,13 @@
 
     if (isset($_POST['date'])) {
         $dateAssigned = true;
-        $date = DateTime::createFromFormat('Y-m', $_POST['date']);
 
-        $month = $date->format('m');
-        $year = $date->format('Y');
+        echo $_POST['date'];
+        
+        //$date = DateTime::createFromFormat('Y-m', $_POST['date']);
+
+        //$month = $date->format('m');
+        //$year = $date->format('Y');
     }
 ?>
 
