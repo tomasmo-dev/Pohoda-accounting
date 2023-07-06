@@ -14,7 +14,7 @@
                 GROUP BY d.cust_ID, d.dispapt;";
 
         $stmt = $connection->prepare($sql);
-        $stmt->bind_param("ii", $month, $year);
+        $stmt->bind_param("ss", $month, $year);
 
         $stmt->execute();
 
