@@ -2,20 +2,19 @@
     // excluded from git for security reasons
     // mainly contains $dbconnect variable
     // !!! REQUIRES CLOSING !!!
-    include_once '../pohoda_db.php'; 
+    include_once '../pohoda_db.php';
+    // queries for pohoda database (they are long, so they are in separate file)
+    include_once 'queries.php';
+
+    $dateAssigned = false;
 
     if (isset($_POST['date'])) {
-        echo $_POST['date'];
-
+        $dateAssigned = true;
         $date = DateTime::createFromFormat('Y-m', $_POST['date']);
 
-        echo $date->format('Y');
-        echo "<br>";
-        echo $date->format('m');
+        $month = $date->format('m');
+        $year = $date->format('Y');
     }
-
-
-    $dbconnect->close();
 ?>
 
 <?php
@@ -24,6 +23,8 @@
     function Get_UserIds_for_date($year, $month){
         // returns array of user ids for given date
         $CustIds = array();
+
+        return GetSql_CustIds($year, $month);
     }
 ?>
 <!DOCTYPE html>
@@ -38,5 +39,21 @@
         <input type="month" name="date">
         <input type="submit" value="Odeslat">
     </form>
+    <br>
+    <?php
+
+    if ($dateAssigned) {
+        var_dump(Get_UserIds_for_date($year, $month));
+    }
+    else{
+        echo "no datum";
+    }
+
+    ?>
 </body>
 </html>
+
+<?php
+
+    $dbconnect->close();
+?>
