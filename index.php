@@ -22,9 +22,10 @@
 
     function Get_UserIds_for_date($year, $month){
         // returns array of user ids for given date
-        $CustIds = array();
 
-        return GetSql_CustIds($year, $month);
+        $CustIds = GetCustIds($year, $month, $GLOBALS['$dbconnect']);
+
+        return $CustIds;
     }
 ?>
 <!DOCTYPE html>
