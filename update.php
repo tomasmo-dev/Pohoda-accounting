@@ -7,7 +7,7 @@ $return = 0;
 $out = array();
 
 chdir('C:\\inetpub\\wwwroot\\robot\\Pohoda-accounting');
-exec('gitpull.bat', $out, $return);
+exec('git pull > "C:\path\to\log\output.txt" 2> "C:\path\to\log\errors.txt"', $out, $return);
 
 echo "git pull done with return code: ".$return."<br>";
 ?>
