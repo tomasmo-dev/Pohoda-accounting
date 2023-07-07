@@ -3,6 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+exit("This script is disabled");
+
 $descriptorspec = [
     0 => ['pipe', 'r'], // stdin
     1 => ['pipe', 'w'], // stdout
