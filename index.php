@@ -29,13 +29,20 @@
         }
     }
 
-    function Get_UserIds_for_date($year, $month){
+    function test($year, $month){
         // returns array of user ids for given date
 
         $CustIds = GetCustIds($year, $month, $GLOBALS['dbconnect']);
 
-        return $CustIds;
+        foreach ($CustIds as $id) {
+            echo 'Id : '.$id ."<br>";
+            $info = GetInvoiceInfoForUser($id, $GLOBALS['dbconnect']);
+            var_dump($info);
+
+            echo "--------------------------------------------<br><br>";
+        }
     }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,12 +60,7 @@
         <?php
 
         if ($dateAssigned) {
-            $ids = Get_UserIds_for_date($year, $month);
-
-            foreach ($ids as $cust_id) {
-                echo $cust_id;
-                echo "<br>";
-            }
+            $ids = test($year, $month);
         }
         else{
             echo "no datum";
