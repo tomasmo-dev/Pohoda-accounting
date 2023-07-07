@@ -26,7 +26,6 @@ if (is_resource($process)) {
     echo "<pre>$output</pre>";
     echo "git pull errors:<br>";
     echo "<pre>$errors</pre>";
-    echo "<br>test";
 }
 
 ?>
