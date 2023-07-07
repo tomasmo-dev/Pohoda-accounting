@@ -32,12 +32,34 @@
     function test($year, $month){
         // returns array of user ids for given date
 
+        date_default_timezone_set('Europe/Prague');
+
         $CustIds = GetCustIds($year, $month, $GLOBALS['dbconnect']);
 
         foreach ($CustIds as $id) {
             echo 'Id : '.$id ."<br>";
             $info = GetInvoiceInfoForUser($id, $GLOBALS['dbconnect']);
-            var_dump($info);
+
+            $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
+
+            $created_d = date('d. m. Y - H:i');
+            $invoice_d = date('t. m. Y');
+
+            $description = "Pilot training";
+
+            $bank_account = "nevim";
+            $company_name = "nevim co sem napsat";
+            $full_name = "nevim co sem napsat2";
+            $city = "nevim co sem napsat3";
+            $address = "nevim co sem napsat4";
+            $zip = "nevim zip";
+            $ico = "nevim ico";
+            $vat = "nevim vat";
+
+            $invoice_xml = RetrieveXml($invoice_id, $created_d, $invoice_d, $invoice_d, $description, $bank_account, $company_name, 
+                                       $full_name, $city, $address, $zip, $ico, $vat);
+
+            echo $invoice_xml;
 
             echo "--------------------------------------------<br><br>";
         }
