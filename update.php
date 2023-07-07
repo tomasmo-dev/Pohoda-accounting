@@ -1,5 +1,5 @@
 <?php
 
-exec('git pull', null, $return);
+exec('git pull', $out, $return);
 echo "git pull done with return code: ".$return."<br>";
 ?>
