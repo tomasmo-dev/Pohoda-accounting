@@ -79,6 +79,10 @@
         <title>Pohoda</title>
 
         <style>
+            body{
+                margin:0;
+                padding:0;
+            }
             #load{
                 width:100%;
                 height:100%;
