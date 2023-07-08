@@ -86,7 +86,7 @@
                 z-index:9999;
                 background:url("/loading.gif") no-repeat center center rgba(0,0,0,0.25);
 
-                display: none;
+                visibility: hidden;
             }
         </style>
     </head>
@@ -113,7 +113,7 @@
             }
 
             function load(){
-                document.getElementById("load").style.display = "block";
+                document.getElementById("load").style.visibility = "visible";
             }
         </script>
     </body>
