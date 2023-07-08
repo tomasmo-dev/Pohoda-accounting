@@ -11,6 +11,8 @@
     include_once '../pohoda_db.php';
     // queries for pohoda database (they are long, so they are in separate file)
     include_once 'queries.php';
+    // includes all functions for working with xml invoices
+    include_once 'xml_format.php';
 
     $dateAssigned = false;
 
@@ -66,23 +68,39 @@
     }
 
 ?>
+
+<!-- ------------------------- HTML ------------------------- -->
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Pohoda</title>
+
+        <style>
+            #load{
+                width:100%;
+                height:100%;
+                position:fixed;
+                z-index:9999;
+                background:url("/loading.gif") no-repeat center center rgba(0,0,0,0.25);
+
+                display: none;
+            }
+        </style>
     </head>
     <body>
+        <div id="load"></div>
         <form method="POST" action="">
             <input type="month" name="date">
-            <input type="submit" value="Odeslat">
+            <input type="submit" value="Odeslat" onclick="load()">
         </form>
         <br>
         <?php
 
         if ($dateAssigned) {
-            $ids = test($year, $month);
+            test($year, $month);
         }
         else{
             echo "no datum";
@@ -92,6 +110,10 @@
         <script>
             if ( window.history.replaceState ) {
                 window.history.replaceState( null, null, window.location.href );
+            }
+
+            function load(){
+                document.getElementById("load").style.display = "block";
             }
         </script>
     </body>
