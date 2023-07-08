@@ -84,7 +84,7 @@
                 height:100%;
                 position:fixed;
                 z-index:9999;
-                background:url("/loading.gif") no-repeat center center rgba(0,0,0,0.25);
+                background:url("assets/Hourglass.gif") no-repeat center center rgba(0,0,0,0.25);
 
                 visibility: hidden;
             }
