@@ -91,14 +91,12 @@
         }
         mkdir($dir, 0777, true);
 
-        var_dump($xmls);
-
         foreach ($xmls as $id => $xml){
             $file_name = "{$id}-invoice.xml";
             $file_path = "{$dir}".DIRECTORY_SEPARATOR."{$file_name}";
 
             $file = fopen($file_path, "w");
-            fwrite($file, $xml);
+            fwrite($file, $xml[$id]);
             fclose($file);
         }
 
