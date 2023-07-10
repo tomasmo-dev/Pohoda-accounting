@@ -131,7 +131,7 @@
         </style>
     </head>
     <body>
-        <h1>Response LIMITED TO 1 ROW!</h1>
+        <h1>RESPONSE LIMITED TO 1 ROW!</h1>
 
         <div id="load"></div>
         <form method="POST" action="">
@@ -151,7 +151,7 @@
             echo '</textarea><br><br>';
         }
         else{
-            echo "no datum";
+            echo "zadne datum";
         }
 
         ?>
