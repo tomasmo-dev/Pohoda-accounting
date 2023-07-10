@@ -13,6 +13,8 @@
     include_once 'queries.php';
     // includes all functions for working with xml invoices
     include_once 'xml_format.php';
+    // includes utility functions
+    include_once 'utils.php';
 
     $dateAssigned = false;
 
@@ -31,8 +33,10 @@
         }
     }
 
-    function test($year, $month){
+    function Fill_Xml($year, $month){
         // returns array of user ids for given date
+
+        $xmls = array();
 
         date_default_timezone_set('Europe/Prague');
 
@@ -61,12 +65,41 @@
             $invoice_xml = RetrieveXml($invoice_id, $created_d, $invoice_d, $invoice_d, $description, $bank_account, $company_name, 
                                        $full_name, $city, $address, $zip, $ico, $vat);
 
-            echo '<textarea style=\'border: none;\'>';
+            $xmls[] = array($id => $invoice_xml);
+            
+            /*
+            echo '<textarea style=\'border: none; width: 100%; height: 500px;\'>';
             echo $invoice_xml;
             echo '</textarea>';
 
-            echo "--------------------------------------------<br><br>";
+            echo "<br>--------------------------------------------<br><br>";
+            */
         }
+
+        return $xmls;
+    }
+
+    function PrepareDownloads($year, $month, $xmls)
+    {
+        $dir_prefix = "{$year}-{$month}-}";
+
+        $dir = "invoices/{$dir_prefix}invoices";
+
+        // overwrite existing directory
+        if (file_exists($dir)) {
+            rrmdir($dir);
+        }
+        mkdir($dir);
+
+        foreach ($xmls as $id => $xml){
+            $file_name = "{$id}-invoice.xml";
+            $file_path = "{$dir}".DIRECTORY_SEPARATOR."{$file_name}";
+
+            $file = fopen($file_path, "w");
+            fwrite($file, $xml);
+            fclose($file);
+        }
+
     }
 
 ?>
@@ -106,7 +139,15 @@
         <?php
 
         if ($dateAssigned) {
-            test($year, $month);
+            $xmls = Fill_Xml($year, $month);
+            PrepareDownloads($year, $month, $xmls);
+
+            foreach ($xmls as $id => $xml){
+                echo $id;
+                echo '<textarea style=\'border: none; width: 100%; height: 500px;\'>';
+                echo $xml;
+                echo '</textarea><br><br>';
+            }
         }
         else{
             echo "no datum";

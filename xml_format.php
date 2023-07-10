@@ -2,7 +2,9 @@
 // TODO - change header to a assoc array and create constructor for it
 function RetrieveXml($invoice_id, $invoice_created_d, $invoice_date, $invoice_due_date, 
                      $description, $client_bank_account_no, $acc_company_name, $acc_full_name,
-                     $acc_city, $acc_address, $acc_zip, $acc_ico, $acc_vat){
+                     $acc_city, $acc_address, $acc_zip, $acc_ico, $acc_vat)
+{
+
 $ico = "26916789"; // ico flying academy
 $invoiceType = "issuedInvoice"; // constant from Pohoda for this usecase
 $paymentType = "draft"; // constant from Pohoda for this usecase
