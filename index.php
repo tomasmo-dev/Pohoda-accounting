@@ -61,7 +61,9 @@
             $invoice_xml = RetrieveXml($invoice_id, $created_d, $invoice_d, $invoice_d, $description, $bank_account, $company_name, 
                                        $full_name, $city, $address, $zip, $ico, $vat);
 
+            echo '<textarea style=\'border: none;\'>';
             echo $invoice_xml;
+            echo '</textarea>';
 
             echo "--------------------------------------------<br><br>";
         }
