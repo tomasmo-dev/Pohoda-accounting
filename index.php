@@ -96,7 +96,7 @@
             $file_path = "{$dir}".DIRECTORY_SEPARATOR."{$file_name}";
 
             $file = fopen($file_path, "w");
-            fwrite($file, $xml[$id]);
+            fwrite($file, $xml);
             fclose($file);
         }
 
@@ -144,7 +144,7 @@
             
 
             echo '<textarea style=\'border: none; width: 100%; height: 500px;\'>';
-            var_dump($xml);
+            var_dump($xmls);
             echo '</textarea><br><br>';
         }
         else{
