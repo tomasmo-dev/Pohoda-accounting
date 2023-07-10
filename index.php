@@ -49,17 +49,18 @@
             $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
             $invoice_no = "invoice_no nevim";
 
-            $created_d = date('d. m. Y - H:i');
-            $invoice_d = date('t. m. Y');
+            $created_d = date('Y-m-d');
+            $invoice_d = date('Y-m-t'); // 'Y-m-t'?
 
             $description = "Pilot training";
 
-            $bank_account = "nevim";
-            $company_name = "nevim co sem napsat";
-            $full_name = "nevim co sem napsat2";
-            $city = "nevim co sem napsat3";
-            $address = "nevim co sem napsat4";
-            $zip = "nevim zip";
+            $bank_account = "bank account";
+            
+            $company_name = "company name";
+            $full_name = $info['FirstName']. ' ' .$info['LastName'];
+            $city = $info['City'];
+            $address = $info['Address1'] . ' ' . $info['Address2'];
+            $zip = $info['ZipCode'];
             $ico = "nevim ico";
             $vat = "nevim vat";
 
