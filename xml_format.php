@@ -80,7 +80,7 @@ function GetXmlItems($items)
         $total = $exbe + $stax; // price + tax
 
         $xml_item = "<inv:invoiceItem>
-                        <inv:text>{$item['text']}</inv:text>
+                        <inv:text>{$item['revenue_type']}</inv:text>
                         <inv:quantity>{$quantity}</inv:quantity>
                         <inv:rateVAT>{$stax}</inv:rateVAT>
                         <inv:homeCurrency>
