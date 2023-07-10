@@ -130,6 +130,8 @@
         </style>
     </head>
     <body>
+        <h1>Response LIMITED TO 1 ROW!</h1>
+
         <div id="load"></div>
         <form method="POST" action="">
             <input type="month" name="date">
@@ -143,7 +145,7 @@
             PrepareDownloads($year, $month, $xmls);
             
 
-            echo '<textarea style=\'border: none; width: 100%; height: 500px;\'>';
+            echo '<textarea style=\'width: 100%; height: 500px;\'>';
             var_dump($xmls);
             echo '</textarea><br><br>';
         }
