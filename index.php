@@ -46,7 +46,6 @@
             echo 'Id : '.$id ."<br>";
             $info = GetInvoiceInfoForUser($id, $GLOBALS['dbconnect']);
             $invoice_items = GetInvoiceItemsForUser($id, $year, $month, $GLOBALS['dbconnect']);
-            var_dump($invoice_items);
 
             $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
             $invoice_no = "invoice_no nevim";
