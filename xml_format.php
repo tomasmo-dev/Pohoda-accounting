@@ -11,6 +11,7 @@ $invoiceType = "issuedInvoice"; // constant from Pohoda for this usecase
 $paymentType = "draft"; // constant from Pohoda for this usecase
 
 $items = GetXmlItems($invoice_items);
+$items_string = implode("\n", $items);
 
 $xml = <<<XML_DOC
 <?xml version="1.0" encoding="UTF-8"?>
@@ -46,16 +47,7 @@ $xml = <<<XML_DOC
                 </inv:partnerIdentity>
             </inv:invoiceHeader>
             <inv:invoiceDetail>
-                <inv:invoiceItem>
-                    <inv:text>[invoice_item.description; ope=max:90; block=inv:invoiceItem]</inv:text>
-                    <inv:quantity>[invoice_item.qnt]</inv:quantity>
-                    <inv:rateVAT>[invoice_item.pohoda_vat_rate; noerr]</inv:rateVAT>
-                    <inv:homeCurrency>
-                        <typ:unitPrice>[invoice_item.unit_price]</typ:unitPrice>
-                        <typ:priceVAT>[invoice_item.vat_rate]</typ:priceVAT>
-                        <typ:priceSum>[invoice_item.total_amount]</typ:priceSum>
-                    </inv:homeCurrency>
-                </inv:invoiceItem>
+                {$items_string}
             </inv:invoiceDetail>
         </inv:invoice>
     </dat:dataPackItem>
