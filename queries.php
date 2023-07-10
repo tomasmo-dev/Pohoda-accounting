@@ -12,7 +12,7 @@
             'WHERE business_unit = \'CZ\' '.
                 'AND MONTH(dispend) = ? AND YEAR(dispend) = ? '.
                 'AND i.item_type NOT IN (\'FX\', \'H\', \'X\', \'Z\') '.
-                'GROUP BY d.cust_ID, d.dispapt LIMIT 1; ';
+                'GROUP BY d.cust_ID, d.dispapt LIMIT 5; ';
 
         $stmt = $connection->prepare($sql);
 
@@ -98,5 +98,51 @@
 
         $stmt->close();
         return $res;
+    }
+
+    function GetInvoiceItemsForUser($id, $year, $month, $connection){
+
+        $items = array(); // array of invoice items
+
+        // fetch invoice items for given user by date
+        $sql = "SELECT c.LastName, c.FirstName, c.Cust_ID, c.home_apt,
+                    d.dispatch_ID, i.revenue_type, SUM(COALESCE(exbeUSD, 0)) AS exbe, SUM(COALESCE(staxUSD, 0)) AS stax, i.item_type
+                FROM system.qb_revenue_items i
+                        LEFT JOIN myfbo_cz_copy.dispatches d ON d.dispatch_ID = i.dispatch_ID AND d.ddel = 0
+                    LEFT JOIN myfbo_cz_copy.customers c ON c.Cust_ID = d.cust_ID
+                WHERE business_unit = 'CZ'
+                    AND MONTH(dispend) = {$month} AND YEAR(dispend) = {$year}
+                    AND i.item_type NOT IN ('FX', 'H', 'X', 'Z')
+                    AND d.cust_ID = {$id}
+                    AND stax != 0
+                /*GROUP BY i.revenue_type*/
+            UNION ALL
+            SELECT c.LastName, c.FirstName, c.Cust_ID, c.home_apt,
+                    d.dispatch_ID, i.revenue_type, SUM(COALESCE(exbeUSD, 0)) AS exbe, SUM(COALESCE(staxUSD, 0)) AS stax, i.item_type
+                FROM system.qb_revenue_items i
+                        LEFT JOIN myfbo_cz_copy.dispatches d ON d.dispatch_ID = i.dispatch_ID AND d.ddel = 0
+                    LEFT JOIN myfbo_cz_copy.customers c ON c.Cust_ID = d.cust_ID
+                WHERE business_unit = 'CZ'
+                    AND MONTH(dispend) = {$month} AND YEAR(dispend) = {$year}
+                    AND i.item_type NOT IN ('FX', 'H', 'X', 'Z')
+                    AND d.cust_ID = {$id}
+                    AND stax = 0
+                /*GROUP BY i.revenue_type*/
+                ORDER BY revenue_type;";
+
+        $result = $connection->query($sql);
+
+        if ($result->num_rows > 0) 
+        {
+            while($row = $result->fetch_assoc()) 
+            {
+                if (!is_null($row['LastName']) && !is_null($row['FirstName'])) // check if row is valid
+                {
+                    array_push($items, $row);
+                }
+            }
+        }
+
+        return $items;
     }
 ?>

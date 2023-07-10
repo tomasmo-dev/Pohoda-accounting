@@ -45,6 +45,7 @@
         foreach ($CustIds as $id) {
             echo 'Id : '.$id ."<br>";
             $info = GetInvoiceInfoForUser($id, $GLOBALS['dbconnect']);
+            $invoice_items = GetInvoiceItemsForUser($id, $year, $month, $GLOBALS['dbconnect']);
 
             $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
             $invoice_no = "invoice_no nevim";
@@ -55,8 +56,8 @@
             $description = "Pilot training";
 
             $bank_account = "bank account";
-            
-            $company_name = "company name";
+
+            $company_name = $info['Organization'];
             $full_name = $info['FirstName']. ' ' .$info['LastName'];
             $city = $info['City'];
             $address = $info['Address1'] . ' ' . $info['Address2'];
@@ -65,7 +66,7 @@
             $vat = "nevim vat";
 
             $invoice_xml = RetrieveXml($invoice_id, $invoice_no, $created_d, $invoice_d, $invoice_d, $description, $bank_account, $company_name, 
-                                       $full_name, $city, $address, $zip, $ico, $vat);
+                                       $full_name, $city, $address, $zip, $ico, $vat, $invoice_items);
 
             $xmls += array($id => $invoice_xml);
             
@@ -132,7 +133,7 @@
         </style>
     </head>
     <body>
-        <h1>RESPONSE LIMITED TO 1 ROW!</h1>
+        <h1>RESPONSE LIMITED TO 5 ROWS!</h1>
 
         <div id="load"></div>
         <form method="POST" action="">
