@@ -89,7 +89,7 @@
         if (file_exists($dir)) {
             rrmdir($dir);
         }
-        mkdir($dir);
+        mkdir($dir, 0777, true);
 
         foreach ($xmls as $id => $xml){
             $file_name = "{$id}-invoice.xml";
@@ -141,13 +141,11 @@
         if ($dateAssigned) {
             $xmls = Fill_Xml($year, $month);
             PrepareDownloads($year, $month, $xmls);
+            
 
-            foreach ($xmls as $id => $xml){
-                echo $id;
-                echo '<textarea style=\'border: none; width: 100%; height: 500px;\'>';
-                echo $xml;
-                echo '</textarea><br><br>';
-            }
+            echo '<textarea style=\'border: none; width: 100%; height: 500px;\'>';
+            var_dump($xml);
+            echo '</textarea><br><br>';
         }
         else{
             echo "no datum";
