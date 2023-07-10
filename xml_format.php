@@ -1,6 +1,6 @@
 <?php
 // TODO - change header to a assoc array and create constructor for it
-function RetrieveXml($invoice_id, $invoice_created_d, $invoice_date, $invoice_due_date, 
+function RetrieveXml($invoice_id, $invoice_no, $invoice_created_d, $invoice_date, $invoice_due_date, 
                      $description, $client_bank_account_no, $acc_company_name, $acc_full_name,
                      $acc_city, $acc_address, $acc_zip, $acc_ico, $acc_vat)
 {
@@ -18,7 +18,7 @@ $xml = <<<XML_DOC
             <inv:invoiceHeader>
                 <inv:invoiceType>{$invoiceType}</inv:invoiceType>
                 <inv:number>
-                    <typ:numberRequested>[invoice.invoice_no; noerr]</typ:numberRequested>
+                    <typ:numberRequested>{$invoice_no}</typ:numberRequested>
                 </inv:number>
                 <inv:date>{$invoice_created_d}</inv:date>
                 <inv:dateTax>{$invoice_date}</inv:dateTax>

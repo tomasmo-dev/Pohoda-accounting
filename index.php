@@ -47,6 +47,7 @@
             $info = GetInvoiceInfoForUser($id, $GLOBALS['dbconnect']);
 
             $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
+            $invoice_no = "invoice_no nevim";
 
             $created_d = date('d. m. Y - H:i');
             $invoice_d = date('t. m. Y');
@@ -62,7 +63,7 @@
             $ico = "nevim ico";
             $vat = "nevim vat";
 
-            $invoice_xml = RetrieveXml($invoice_id, $created_d, $invoice_d, $invoice_d, $description, $bank_account, $company_name, 
+            $invoice_xml = RetrieveXml($invoice_id, $invoice_no, $created_d, $invoice_d, $invoice_d, $description, $bank_account, $company_name, 
                                        $full_name, $city, $address, $zip, $ico, $vat);
 
             $xmls += array($id => $invoice_xml);
