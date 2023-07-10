@@ -81,7 +81,7 @@
 
     function PrepareDownloads($year, $month, $xmls)
     {
-        $dir_prefix = "{$year}-{$month}-}";
+        $dir_prefix = "{$year}-{$month}-";
 
         $dir = "invoices/{$dir_prefix}invoices";
 
@@ -90,6 +90,8 @@
             rrmdir($dir);
         }
         mkdir($dir, 0777, true);
+
+        var_dump($xmls);
 
         foreach ($xmls as $id => $xml){
             $file_name = "{$id}-invoice.xml";
