@@ -13,8 +13,8 @@ $paymentType = "draft"; // constant from Pohoda for this usecase
 
 $parameterVal = "CZ".$custId;
 
-$items = GetXmlItems($invoice_items);
-$items_string = implode("\n", $items);
+$items = GetXmlItems($invoice_items); // array of string items
+$items_string = implode("\n", $items); // concatonates items with newlines
 
 $xml = <<<XML_DOC
 <?xml version="1.0" encoding="UTF-8"?>

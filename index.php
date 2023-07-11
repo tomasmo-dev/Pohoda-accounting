@@ -18,7 +18,7 @@
 
     $dbconnect->set_charset("utf8");
 
-    $dateAssigned = false;
+    $dateAssigned = false; // flag if post request is valid
 
     if (isset($_POST['date'])) {
         $dateAssigned = true;
@@ -52,9 +52,9 @@
             $invoice_items = GetInvoiceItemsForUser($id, $year, $month, $GLOBALS['dbconnect']); // detail
 
             $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
-            $varSym = $year.$month.$id;
+            $varSym = $year.$month.$id; // variable symbol
 
-            $created_d = date('Y-m-d');
+            $created_d = date('Y-m-d'); // today
             $invoice_d = DateTime::createFromFormat('Y-m-d', "{$year}-{$month}-1")->format('Y-m-t'); // last day of month
 
             $description = "Pilot training";
@@ -71,23 +71,15 @@
                                        $id, $description, $company_name, 
                                        $full_name, $city, $address, $zip, $ico, $vat, $invoice_items); // creates xml
 
-            $total_price = GetTotalPrice($id, $year, $month, $GLOBALS['dbconnect']);
+            $total_price = GetTotalPrice($id, $year, $month, $GLOBALS['dbconnect']); // gets total price for id (-2 is error)
             
 
             $internal_xml = RetrieveInternalXml($year, $month, $id,
                                                 $created_d, $invoice_d, $invoice_d, $invoice_d,
-                                                $full_name, $city, $address, $total_price);
+                                                $full_name, $city, $address, $total_price); // creates internal xml
 
             $xmls += array($id => $invoice_xml);
             $xmls_internal += array($id => $internal_xml);
-            
-            /*
-            echo '<textarea style=\'border: none; width: 100%; height: 500px;\'>';
-            echo $invoice_xml;
-            echo '</textarea>';
-
-            echo "<br>--------------------------------------------<br><br>";
-            */
         }
 
         $final = array(

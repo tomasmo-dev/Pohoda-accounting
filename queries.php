@@ -2,8 +2,8 @@
 
     // returns an array of customer ids for given month and year
     function GetCustIds($year, $month, $connection){
-        $CustIds = array();
-        $ValidCustIds = array();
+        $CustIds = array(); // all customer ids
+        $ValidCustIds = array(); // customer ids with non zero amount to pay
 
         $sql = 
         'SELECT DISTINCT d.cust_ID, MONTH(d.dispend) AS month, YEAR(d.dispend) AS year, d.dispapt '.
@@ -55,7 +55,7 @@
 
             if ($result_Amount->num_rows > 0) {
                 while($row_Amount = $result_Amount->fetch_assoc()) {
-                    if ($row_Amount["exbe"] + $row_Amount["stax"] > 0) {
+                    if ($row_Amount["exbe"] + $row_Amount["stax"] > 0) { // if amount to pay is non zero
                         array_push($ValidCustIds, $custId);
                     }
                 }
@@ -181,7 +181,7 @@
         }
         else
         {
-            $total_price = -199999999;
+            $total_price = -2; // if error make it easily catchable
         }
 
         $stmt->close();
