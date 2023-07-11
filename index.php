@@ -38,6 +38,8 @@
     function Fill_Xml($year, $month){
         // returns array of user ids for given date
 
+        IndexDb($GLOBALS['dbconnect']);
+
         $xmls = array();
 
         date_default_timezone_set('Europe/Prague');
@@ -53,7 +55,7 @@
             $invoice_no = "invoice_no nevim";
 
             $created_d = date('Y-m-d');
-            $invoice_d = date('Y-m-t'); // 'Y-m-t'?
+            $invoice_d = date('Y-m-t'); // last day of month
 
             $description = "Pilot training";
 
@@ -67,7 +69,8 @@
             $ico = "nevim ico";
             $vat = "nevim vat";
 
-            $invoice_xml = RetrieveXml($invoice_id, $invoice_no, $created_d, $invoice_d, $invoice_d, $description, $bank_account, $company_name, 
+            $invoice_xml = RetrieveXml($invoice_id, $invoice_no, $created_d, $invoice_d, $invoice_d,
+                                       $id, $description, $company_name, 
                                        $full_name, $city, $address, $zip, $ico, $vat, $invoice_items);
 
             $xmls += array($id => $invoice_xml);

@@ -145,4 +145,16 @@
 
         return $items;
     }
+
+    function IndexDb($connection) // indexes tables so queries are faster
+    {
+        $connection->query("ALTER TABLE `system`.`qb_revenue_items`
+                            ADD INDEX `index1` (`dispatch_ID` ASC),
+                            ADD INDEX `index2` (`item_ID` ASC),
+                            ADD INDEX `index3` (`item_type` ASC);");
+        
+        $connection->query("ALTER TABLE `myfbo_cz_copy`.`dispatches`
+                            ADD INDEX `index2` (`cust_ID` ASC),
+                            ADD INDEX `index3` (`dispend` ASC);");
+    }
 ?>

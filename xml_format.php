@@ -1,7 +1,7 @@
 <?php
 // TODO - change header to a assoc array and create constructor for it
 function RetrieveXml($invoice_id, $invoice_no, $invoice_created_d, $invoice_date, $invoice_due_date, 
-                     $description, $client_bank_account_no, $acc_company_name, $acc_full_name,
+                     $custId, $description, $acc_company_name, $acc_full_name,
                      $acc_city, $acc_address, $acc_zip, $acc_ico, $acc_vat,
                      $invoice_items)
 {
@@ -9,6 +9,8 @@ function RetrieveXml($invoice_id, $invoice_no, $invoice_created_d, $invoice_date
 $ico = "26916789"; // ico flying academy
 $invoiceType = "issuedInvoice"; // constant from Pohoda for this usecase
 $paymentType = "draft"; // constant from Pohoda for this usecase
+
+$parameterVal = "CZ".$custId;
 
 $items = GetXmlItems($invoice_items);
 $items_string = implode("\n", $items);
@@ -26,13 +28,29 @@ $xml = <<<XML_DOC
                 <inv:date>{$invoice_created_d}</inv:date>
                 <inv:dateTax>{$invoice_date}</inv:dateTax>
                 <inv:dateDue>{$invoice_due_date}</inv:dateDue>
-                
+                <inv:accounting>
+                    <typ:ids>602LETSKOLA</typ:ids>
+                </inv:accounting>
+                <inv:classificationVAT>
+                    <typ:ids>UDA5</typ:ids>
+                </inv:classificationVAT>
+                <inv:centre>
+                    <typ:ids>ATO</typ:ids>
+                </inv:centre>
+                <inv:parameters>
+                    <typ:parameter>
+                    <typ:name>VPrMyFboID</typ:name>
+                    <typ:textValue>{$parameterVal}</typ:textValue>
+                    </typ:parameter>
+                </inv:parameters>
                 <inv:text>{$description}</inv:text>
                 <inv:paymentType>
                     <typ:paymentType>{$paymentType}</typ:paymentType>
                 </inv:paymentType>
                 <inv:account>
-                    <typ:accountNo>{$client_bank_account_no}</typ:accountNo>
+                    <typ:ids>KBCZ</typ:ids>
+                    <typ:accountNo>51-942250257</typ:accountNo>
+                    <typ:bankCode>0100</typ:bankCode>
                 </inv:account>
                 <inv:partnerIdentity>
                     <typ:address>
@@ -69,12 +87,14 @@ function GetXmlItems($items)
         $stax = $item['stax']; // tax
         $exbe = $item['exbe']; // price
 
+        $rateVat = $stax == 0 ? "none" : "high"; // tax rate
+
         $total = $exbe + $stax; // price + tax
 
         $xml_item = "<inv:invoiceItem>
                         <inv:text>{$item['revenue_type']}</inv:text>
                         <inv:quantity>{$quantity}</inv:quantity>
-                        <inv:rateVAT>{$stax}</inv:rateVAT>
+                        <inv:rateVAT>{$rateVat}</inv:rateVAT>
                         <inv:homeCurrency>
                             <typ:unitPrice>{$exbe}</typ:unitPrice>
                             <typ:priceVAT>{$stax}</typ:priceVAT>
