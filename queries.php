@@ -111,9 +111,9 @@
                         LEFT JOIN myfbo_cz_copy.dispatches d ON d.dispatch_ID = i.dispatch_ID AND d.ddel = 0
                     LEFT JOIN myfbo_cz_copy.customers c ON c.Cust_ID = d.cust_ID
                 WHERE business_unit = 'CZ'
-                    AND MONTH(dispend) = {$month} AND YEAR(dispend) = {$year}
+                    AND MONTH(dispend) = ? AND YEAR(dispend) = ?
                     AND i.item_type NOT IN ('FX', 'H', 'X', 'Z')
-                    AND d.cust_ID = {$id}
+                    AND d.cust_ID = ?
                     AND stax != 0
                 /*GROUP BY i.revenue_type*/
             UNION ALL
@@ -123,14 +123,19 @@
                         LEFT JOIN myfbo_cz_copy.dispatches d ON d.dispatch_ID = i.dispatch_ID AND d.ddel = 0
                     LEFT JOIN myfbo_cz_copy.customers c ON c.Cust_ID = d.cust_ID
                 WHERE business_unit = 'CZ'
-                    AND MONTH(dispend) = {$month} AND YEAR(dispend) = {$year}
+                    AND MONTH(dispend) = ? AND YEAR(dispend) = ?
                     AND i.item_type NOT IN ('FX', 'H', 'X', 'Z')
-                    AND d.cust_ID = {$id}
+                    AND d.cust_ID = ?
                     AND stax = 0
                 /*GROUP BY i.revenue_type*/
                 ORDER BY revenue_type;";
 
-        $result = $connection->query($sql);
+        $stmt = $connection->prepare($sql);
+        $stmt->bind_param("ssssss", $month, $year, $id, $month, $year, $id);
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) 
         {
@@ -143,7 +148,44 @@
             }
         }
 
+        $stmt->close();
+
         return $items;
+    }
+
+    function GetTotalPrice($id, $year, $month, $connection) // gets total price for customer id
+    {
+        $sql = "SELECT SUM(COALESCE(exbeUSD, 0)) AS exbe, SUM(COALESCE(staxUSD, 0)) AS stax
+                    FROM system.qb_revenue_items i
+                            LEFT JOIN myfbo_cz_copy.dispatches d ON d.dispatch_ID = i.dispatch_ID AND d.ddel = 0
+                        LEFT JOIN myfbo_cz_copy.customers c ON c.Cust_ID = d.cust_ID
+                    WHERE business_unit = 'CZ'
+                        AND MONTH(dispend) = ? AND YEAR(dispend) = ?
+                        AND i.item_type NOT IN ('FX', 'H', 'X', 'Z')
+                        AND d.cust_ID = ?;";
+
+        $total_price = 0; // exbe + stax
+
+        $stmt = $connection->prepare($sql);
+        $stmt->bind_param("sss", $month, $year, $id);
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 1) 
+        {
+            $row = $result->fetch_assoc();
+            
+            $total_price = $row['exbe'] + $row['stax'];
+        }
+        else
+        {
+            $total_price = -199999999;
+        }
+
+        $stmt->close();
+        return $total_price;
     }
 
     function IndexDb($connection) // indexes tables so queries are faster

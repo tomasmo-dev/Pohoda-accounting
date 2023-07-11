@@ -38,18 +38,18 @@
     function Fill_Xml($year, $month){
         // returns array of user ids for given date
 
-        IndexDb($GLOBALS['dbconnect']);
+        IndexDb($GLOBALS['dbconnect']); // index database for faster queries
 
-        $xmls = array();
+        $xmls = array(); // array of invoices
+        $xmls_internal = array(); // array of internal invoices
 
         date_default_timezone_set('Europe/Prague');
 
         $CustIds = GetCustIds($year, $month, $GLOBALS['dbconnect']);
 
         foreach ($CustIds as $id) {
-            echo 'Id : '.$id ."<br>";
-            $info = GetInvoiceInfoForUser($id, $GLOBALS['dbconnect']);
-            $invoice_items = GetInvoiceItemsForUser($id, $year, $month, $GLOBALS['dbconnect']);
+            $info = GetInvoiceInfoForUser($id, $GLOBALS['dbconnect']); // header
+            $invoice_items = GetInvoiceItemsForUser($id, $year, $month, $GLOBALS['dbconnect']); // detail
 
             $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
             $varSym = $year.$month.$id;
@@ -69,9 +69,17 @@
 
             $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d,
                                        $id, $description, $company_name, 
-                                       $full_name, $city, $address, $zip, $ico, $vat, $invoice_items);
+                                       $full_name, $city, $address, $zip, $ico, $vat, $invoice_items); // creates xml
+
+            $total_price = GetTotalPrice($id, $year, $month, $GLOBALS['dbconnect']);
+            
+
+            $internal_xml = RetrieveInternalXml($year, $month, $id,
+                                                $created_d, $invoice_d, $invoice_d, $invoice_d,
+                                                $full_name, $city, $address, $total_price);
 
             $xmls += array($id => $invoice_xml);
+            $xmls_internal += array($id => $internal_xml);
             
             /*
             echo '<textarea style=\'border: none; width: 100%; height: 500px;\'>';
@@ -82,7 +90,12 @@
             */
         }
 
-        return $xmls;
+        $final = array(
+            'invoices' => $xmls,
+            'internal' => $xmls_internal
+        );
+
+        return $final;
     }
 
     function PrepareDownloads($year, $month, $xmls)
@@ -103,10 +116,13 @@
 
         mkdir($dir, 0777, true);
 
+        $invoices = $xmls['invoices'];
+        $internal = $xmls['internal'];
+
         $zip = new ZipArchive;
         $zip->open($zip_dir, ZipArchive::CREATE);
 
-        foreach ($xmls as $id => $xml){
+        foreach ($invoices as $id => $xml){
             $file_name = "{$id}-invoice.xml";
             $file_path = "{$dir}".DIRECTORY_SEPARATOR."{$file_name}";
 
@@ -115,6 +131,14 @@
             fclose($file);
 
             $zip->addFile($file_path, $file_name);
+        }
+        foreach ($internal as $id => $xml) {
+            $file_name = "{$id}-internal.xml";
+            $file_path = "{$dir}".DIRECTORY_SEPARATOR."{$file_name}";
+
+            $file = fopen($file_path, "w");
+            fwrite($file, $xml);
+            fclose($file);
         }
 
         $zip->close();
