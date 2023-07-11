@@ -66,7 +66,7 @@
         }
 
 
-        return $CustIds;
+        return $ValidCustIds;
     }
 
     function GetInvoiceInfoForUser($custId, $connection){

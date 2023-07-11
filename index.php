@@ -16,6 +16,8 @@
     // includes utility functions
     include_once 'utils.php';
 
+    $dbconnect->set_charset("utf8");
+
     $dateAssigned = false;
 
     if (isset($_POST['date'])) {
