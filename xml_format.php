@@ -22,9 +22,7 @@ $xml = <<<XML_DOC
         <inv:invoice version="2.0">
             <inv:invoiceHeader>
                 <inv:invoiceType>{$invoiceType}</inv:invoiceType>
-                <inv:number>
-                    <typ:numberRequested>{$invoice_no}</typ:numberRequested>
-                </inv:number>
+                
                 <inv:date>{$invoice_created_d}</inv:date>
                 <inv:dateTax>{$invoice_date}</inv:dateTax>
                 <inv:dateDue>{$invoice_due_date}</inv:dateDue>
