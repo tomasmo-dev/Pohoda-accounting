@@ -55,7 +55,7 @@
             $invoice_no = "";
 
             $created_d = date('Y-m-d');
-            $invoice_d = date('Y-m-t'); // last day of month
+            $invoice_d = DateTime::createFromFormat('Y-m-d', "{$year}-{$month}-1")->format('Y-m-t'); // last day of month
 
             $description = "Pilot training";
 
