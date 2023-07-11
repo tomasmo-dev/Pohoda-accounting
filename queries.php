@@ -12,7 +12,7 @@
             'WHERE business_unit = \'CZ\' '.
                 'AND MONTH(dispend) = ? AND YEAR(dispend) = ? '.
                 'AND i.item_type NOT IN (\'FX\', \'H\', \'X\', \'Z\') '.
-                'GROUP BY d.cust_ID, d.dispapt; ';
+                'GROUP BY d.cust_ID, d.dispapt LIMIT 20; ';
 
         $stmt = $connection->prepare($sql);
 
