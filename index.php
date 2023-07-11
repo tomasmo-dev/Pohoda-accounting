@@ -52,7 +52,7 @@
             $invoice_items = GetInvoiceItemsForUser($id, $year, $month, $GLOBALS['dbconnect']);
 
             $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
-            $invoice_no = "";
+            $varSym = $year.$month.$id;
 
             $created_d = date('Y-m-d');
             $invoice_d = DateTime::createFromFormat('Y-m-d', "{$year}-{$month}-1")->format('Y-m-t'); // last day of month
@@ -67,7 +67,7 @@
             $ico = "nevim ico";
             $vat = "nevim vat";
 
-            $invoice_xml = RetrieveXml($invoice_id, $invoice_no, $created_d, $invoice_d, $invoice_d,
+            $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d,
                                        $id, $description, $company_name, 
                                        $full_name, $city, $address, $zip, $ico, $vat, $invoice_items);
 
