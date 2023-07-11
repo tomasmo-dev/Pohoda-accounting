@@ -139,6 +139,8 @@
             $file = fopen($file_path, "w");
             fwrite($file, $xml);
             fclose($file);
+
+            $zip->addFile($file_path, $file_name);
         }
 
         $zip->close();
