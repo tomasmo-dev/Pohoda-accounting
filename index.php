@@ -145,9 +145,10 @@
         </style>
     </head>
     <body>
+        <div id="load"></div>
+
         <h1>RESPONSE LIMITED TO 5 ROWS!</h1>
 
-        <div id="load"></div>
         <form method="POST" action="">
             <input type="month" name="date">
             <input type="submit" value="Odeslat" onclick="load()">
@@ -159,7 +160,7 @@
             $xmls = Fill_Xml($year, $month);
             PrepareDownloads($year, $month, $xmls);
             
-
+            echo '<a href="invoices/zip/'.$year.'-'.$month.'-invoices.zip" download>Download</a><br><br>';
             echo '<textarea style=\'width: 100%; height: 500px;\'>';
             var_dump($xmls);
             echo '</textarea><br><br>';
