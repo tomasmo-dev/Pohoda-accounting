@@ -52,14 +52,12 @@
             $invoice_items = GetInvoiceItemsForUser($id, $year, $month, $GLOBALS['dbconnect']);
 
             $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
-            $invoice_no = "invoice_no nevim";
+            $invoice_no = "";
 
             $created_d = date('Y-m-d');
             $invoice_d = date('Y-m-t'); // last day of month
 
             $description = "Pilot training";
-
-            $bank_account = "bank account";
 
             $company_name = $info['Organization'];
             $full_name = $info['FirstName']. ' ' .$info['LastName'];
