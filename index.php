@@ -86,13 +86,22 @@
     {
         $dir_prefix = "{$year}-{$month}-";
 
-        $dir = "invoices/{$dir_prefix}invoices";
+        $dir = "invoices/raw/{$dir_prefix}invoices";
+        $zip_dir = "invoices/zip/{$dir_prefix}invoices.zip";
 
         // overwrite existing directory
         if (file_exists($dir)) {
             rrmdir($dir);
         }
+        // overwrite existing zip
+        if (file_exists($zip_dir)) {
+            unlink($zip_dir);
+        }
+
         mkdir($dir, 0777, true);
+
+        $zip = new ZipArchive;
+        $zip->open($zip_dir, ZipArchive::CREATE);
 
         foreach ($xmls as $id => $xml){
             $file_name = "{$id}-invoice.xml";
@@ -101,8 +110,11 @@
             $file = fopen($file_path, "w");
             fwrite($file, $xml);
             fclose($file);
+
+            $zip->addFile($file_path, $file_name);
         }
 
+        $zip->close();
     }
 
 ?>
