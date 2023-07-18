@@ -72,11 +72,29 @@
                                        $full_name, $city, $address, $zip, $ico, $vat, $invoice_items); // creates xml
 
             $total_price = GetTotalPrice($id, $year, $month, $GLOBALS['dbconnect']); // gets total price for id (-2 is error)
-            
+            if ($total_price == -2) {
+                echo "Error: Total price for id {$id} is -2";
+                continue;
+            }
 
-            $internal_xml = RetrieveInternalXml($year, $month, $id,
-                                                $created_d, $invoice_d, $invoice_d, $invoice_d,
-                                                $full_name, $city, $address, $total_price); // creates internal xml
+            $internal_p_final = 0; // final price for internal invoice
+            $internal_xml = ""; // internal invoice xml
+
+            $internal_price = $total_price; // for clarity purposes
+            $balance = $info['PrepayBalance']; // balance for client
+
+            if ($balance < 0 && abs($balance) > $internal_price)
+            {
+                $internal_xml = "";
+            }
+            else if ($balance < 0) // if balance is negative, add it to price
+            {
+                $internal_p_final = $internal_price + $balance;
+
+                $internal_xml = RetrieveInternalXml($year, $month, $id,
+                                                    $created_d, $invoice_d, $invoice_d, $invoice_d,
+                                                    $full_name, $city, $address, $internal_p_final); // creates internal xml
+            }
 
             $xmls += array($id => $invoice_xml);
             $xmls_internal += array($id => $internal_xml);
@@ -128,11 +146,14 @@
             $file_name = "{$id}-internal.xml";
             $file_path = "{$dir}".DIRECTORY_SEPARATOR."{$file_name}";
 
-            $file = fopen($file_path, "w");
-            fwrite($file, $xml);
-            fclose($file);
-
-            $zip->addFile($file_path, $file_name);
+            if ($xml != "") // if there is no internal invoice, don't create file
+            {
+                $file = fopen($file_path, "w");
+                fwrite($file, $xml);
+                fclose($file);
+    
+                $zip->addFile($file_path, $file_name);
+            }
         }
 
         $zip->close();
