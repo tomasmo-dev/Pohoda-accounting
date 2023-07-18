@@ -171,9 +171,19 @@
         <title>Pohoda</title>
 
         <style>
+            @font-face{
+                font-family: "Nanum Gothic";
+                src: url("assets/fonts/NanumGothic-Regular.ttf");
+            }
+
             body{
                 margin:0;
                 padding:0;
+
+                font-family: "Nanum Gothic", sans-serif;
+
+                margin-top: 5px;
+                margin-left: 5px;
             }
             #load{
                 width:100%;
