@@ -95,6 +95,12 @@
                                                     $created_d, $invoice_d, $invoice_d, $invoice_d,
                                                     $full_name, $city, $address, $internal_p_final); // creates internal xml
             }
+            else
+            {
+                $internal_xml = RetrieveInternalXml($year, $month, $id,
+                                                    $created_d, $invoice_d, $invoice_d, $invoice_d,
+                                                    $full_name, $city, $address, $total_price); // creates internal xml
+            }
 
             $xmls += array($id => $invoice_xml);
             $xmls_internal += array($id => $internal_xml);
