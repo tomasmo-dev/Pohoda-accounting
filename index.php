@@ -158,6 +158,13 @@
 
         $zip->close();
     }
+    
+    function DisplayDebugInformation($xmls){
+        echo '<br><hr>';
+        echo '<textarea style=\'width: 100%; height: 500px;\'>';
+        var_dump($xmls);
+        echo '</textarea><hr><br><br>';
+    }
 
 ?>
 
@@ -212,13 +219,12 @@
             $xmls = Fill_Xml($year, $month);
             PrepareDownloads($year, $month, $xmls);
             
-            echo '<a href="invoices/zip/'.$year.'-'.$month.'-invoices.zip" download>Download</a><br><br>';
-            echo '<textarea style=\'width: 100%; height: 500px;\'>';
-            var_dump($xmls);
-            echo '</textarea><br><br>';
+            echo '<a href="invoices/zip/'.$year.'-'.$month.'-invoices.zip" download>Stáhnout faktury</a><br><br>';
+
+            DisplayDebugInformation($xmls);
         }
         else{
-            echo "zadne datum";
+            echo "Žádný měsíc nebyl vybrán!";
         }
 
         ?>
