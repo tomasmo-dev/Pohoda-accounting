@@ -221,7 +221,7 @@
         }
         else if($result->num_rows < 1)
         {
-            echo "Error: no customer found for given id {$myfboId}";
+            echo "Error: no customer found for given id {$myfboId}<br>";
             return array(-1, -1);
         }
 
