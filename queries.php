@@ -210,14 +210,17 @@
         }
         else if($result->num_rows > 1)
         {
+            $ico_dic_found = false;
             while ($row = $result->fetch_assoc()) {
                 if ($row['ICO'] != "" && $row['DIC'] != "") {
+                    $ico_dic_found = true;
                     $ico_dic = array($row['ICO'], $row['DIC']);
                     break;
                 }
             }
 
-            return $ico_dic;
+
+            return $ico_dic_found == true ? $ico_dic : array("", ""); // if ico & dic not found return empty array
         }
         else if($result->num_rows < 1)
         {
