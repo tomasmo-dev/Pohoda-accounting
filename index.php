@@ -67,7 +67,7 @@
             $ico = "nevim ico";
             $vat = "nevim vat";
 
-            $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d,
+            $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d, $invoice_d,
                                        $id, $description, $company_name, 
                                        $full_name, $city, $address, $zip, $ico, $vat, $invoice_items); // creates xml
 

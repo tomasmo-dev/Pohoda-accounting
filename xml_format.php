@@ -1,6 +1,6 @@
 <?php
 // TODO - change header to a assoc array and create constructor for it
-function RetrieveXml($invoice_id, $varSym, $invoice_created_d, $invoice_date, $invoice_due_date, 
+function RetrieveXml($invoice_id, $varSym, $invoice_created_d, $invoice_date, $invoice_acc_d, $invoice_due_date, 
                      $custId, $description, $acc_company_name, $acc_full_name,
                      $acc_city, $acc_address, $acc_zip, $acc_ico, $acc_vat,
                      $invoice_items)
@@ -26,6 +26,7 @@ $xml = <<<XML_DOC
                 <inv:symVar>{$varSym}</inv:symVar>
                 <inv:date>{$invoice_created_d}</inv:date>
                 <inv:dateTax>{$invoice_date}</inv:dateTax>
+                <inv:dateAccounting>{$invoice_acc_d}</inv:dateAccounting>
                 <inv:dateDue>{$invoice_due_date}</inv:dateDue>
                 <inv:accounting>
                     <typ:ids>602LETSKOLA</typ:ids>
@@ -91,7 +92,7 @@ function GetXmlItems($items)
         $total = $exbe + $stax; // price + tax
 
         $xml_item = "<inv:invoiceItem>
-                        <inv:text>{$item['revenue_type']}</inv:text>
+                        <inv:text>Pilot training</inv:text>
                         <inv:quantity>{$quantity}</inv:quantity>
                         <inv:rateVAT>{$rateVat}</inv:rateVAT>
                         <inv:homeCurrency>

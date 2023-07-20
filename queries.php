@@ -37,7 +37,7 @@
         }
 
         foreach ($CustIds as $custId) {
-            $sql_Amount = 'SELECT SUM(COALESCE(exbeUSD, 0)) AS exbe, SUM(COALESCE(staxUSD, 0)) AS stax '.
+            $sql_Amount = 'SELECT SUM(COALESCE(exbeCZK, 0)) AS exbe, SUM(COALESCE(staxCZK, 0)) AS stax '.
                           'FROM system.qb_revenue_items i '.
                           'LEFT JOIN myfbo_cz_copy.dispatches d ON d.dispatch_ID = i.dispatch_ID AND d.ddel = 0 '.
                           'LEFT JOIN myfbo_cz_copy.customers c ON c.Cust_ID = d.cust_ID '.
@@ -106,7 +106,7 @@
 
         // fetch invoice items for given user by date
         $sql = "SELECT c.LastName, c.FirstName, c.Cust_ID, c.home_apt,
-                    d.dispatch_ID, i.revenue_type, SUM(COALESCE(exbeUSD, 0)) AS exbe, SUM(COALESCE(staxUSD, 0)) AS stax, i.item_type
+                    d.dispatch_ID, i.revenue_type, SUM(COALESCE(exbeCZK, 0)) AS exbe, SUM(COALESCE(staxCZK, 0)) AS stax, i.item_type
                 FROM system.qb_revenue_items i
                         LEFT JOIN myfbo_cz_copy.dispatches d ON d.dispatch_ID = i.dispatch_ID AND d.ddel = 0
                     LEFT JOIN myfbo_cz_copy.customers c ON c.Cust_ID = d.cust_ID
@@ -118,7 +118,7 @@
                 /*GROUP BY i.revenue_type*/
             UNION ALL
             SELECT c.LastName, c.FirstName, c.Cust_ID, c.home_apt,
-                    d.dispatch_ID, i.revenue_type, SUM(COALESCE(exbeUSD, 0)) AS exbe, SUM(COALESCE(staxUSD, 0)) AS stax, i.item_type
+                    d.dispatch_ID, i.revenue_type, SUM(COALESCE(exbeCZK, 0)) AS exbe, SUM(COALESCE(staxCZK, 0)) AS stax, i.item_type
                 FROM system.qb_revenue_items i
                         LEFT JOIN myfbo_cz_copy.dispatches d ON d.dispatch_ID = i.dispatch_ID AND d.ddel = 0
                     LEFT JOIN myfbo_cz_copy.customers c ON c.Cust_ID = d.cust_ID
@@ -155,7 +155,7 @@
 
     function GetTotalPrice($id, $year, $month, $connection) // gets total price for customer id
     {
-        $sql = "SELECT SUM(COALESCE(exbeUSD, 0)) AS exbe, SUM(COALESCE(staxUSD, 0)) AS stax
+        $sql = "SELECT SUM(COALESCE(exbeCZK, 0)) AS exbe, SUM(COALESCE(staxCZK, 0)) AS stax
                     FROM system.qb_revenue_items i
                             LEFT JOIN myfbo_cz_copy.dispatches d ON d.dispatch_ID = i.dispatch_ID AND d.ddel = 0
                         LEFT JOIN myfbo_cz_copy.customers c ON c.Cust_ID = d.cust_ID
