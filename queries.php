@@ -188,6 +188,48 @@
         return $total_price;
     }
 
+    // myfbo id = "CZ{$custId}"
+    function GetICO_DIC($myfboId, $connection) // try to get ico & dic from pohoda_adresar
+    {
+        $ico_dic = array();
+
+        $sql = "SELECT * FROM system.pohoda_adresar WHERE VPrMyFboID = ?;";
+        $stmt = $connection->prepare($sql);
+
+        $stmt->bind_param("s", $myfboId);
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 1) 
+        {
+            $row = $result->fetch_assoc();
+            
+            $ico_dic = array($row['ICO'], $row['DIC']);
+        }
+        else if($result->num_rows > 1)
+        {
+            while ($row = $result->fetch_assoc()) {
+                if ($row['ICO'] != "" && $row['DIC'] != "") {
+                    $ico_dic = array($row['ICO'], $row['DIC']);
+                    break;
+                }
+            }
+
+            return $ico_dic;
+        }
+        else if($result->num_rows < 1)
+        {
+            echo "Error: no customer found for given id {$myfboId}";
+            return array(-1, -1);
+        }
+
+        $stmt->close();
+
+        return $ico_dic;
+    }
+
     function IndexDb($connection) // indexes tables so queries are faster
     {
         $connection->query("ALTER TABLE `system`.`qb_revenue_items`

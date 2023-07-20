@@ -51,11 +51,17 @@
             $info = GetInvoiceInfoForUser($id, $GLOBALS['dbconnect']); // header
             $invoice_items = GetInvoiceItemsForUser($id, $year, $month, $GLOBALS['dbconnect']); // detail
 
+            $myfboId = "CZ{$id}";
+
             $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
             $varSym = $year.$month.$id; // variable symbol
 
             $created_d = date('Y-m-d'); // today
             $invoice_d = DateTime::createFromFormat('Y-m-d', "{$year}-{$month}-1")->format('Y-m-t'); // last day of month
+
+            // array of ico and dic from pohoda_adresar (if there is more than one, take first one) ->
+            // -> ico is index 0, dic is index 1
+            $ico_dic = GetICO_DIC($myfboId, $GLOBALS['dbconnect']); // get ico & dic from pohoda_adresar
 
             $description = "Pilot training";
 
@@ -64,8 +70,8 @@
             $city = $info['City'];
             $address = $info['Address1'] . ' ' . $info['Address2'];
             $zip = $info['ZipCode'];
-            $ico = "nevim ico";
-            $vat = "nevim vat";
+            $ico = $ico_dic[0];
+            $vat = $ico_dic[1];
 
             $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d, $invoice_d,
                                        $id, $description, $company_name, 
