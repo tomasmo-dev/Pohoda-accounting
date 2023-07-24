@@ -243,5 +243,8 @@
         $connection->query("ALTER TABLE `myfbo_cz_copy`.`dispatches`
                             ADD INDEX `index2` (`cust_ID` ASC),
                             ADD INDEX `index3` (`dispend` ASC);");
+
+        $connection->query("ALTER TABLE `system`.`pohoda_adresar`
+                            ADD INDEX `index2` (`VPrMyFboID` ASC);");
     }
 ?>
