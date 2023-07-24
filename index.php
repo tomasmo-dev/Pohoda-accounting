@@ -222,7 +222,7 @@
         <div id="load"></div>
 
         <?php
-        LIMIT == -1 ? "" : "<h1>RESPONSE LIMITED TO ".LIMIT." ROWS!</h1>";
+        echo (LIMIT == -1 ? "" : "<h1>RESPONSE LIMITED TO ".LIMIT." ROWS!</h1>");
         ?>
 
         <form method="POST" action="">
