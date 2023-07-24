@@ -181,7 +181,7 @@
         }
         else
         {
-            $total_price = -2; // if error make it easily catchable
+            $total_price = false; // if error make it easily catchable
         }
 
         $stmt->close();

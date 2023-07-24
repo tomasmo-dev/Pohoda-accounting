@@ -78,8 +78,8 @@
                                        $full_name, $city, $address, $zip, $ico, $vat, $invoice_items); // creates xml
 
             $total_price = GetTotalPrice($id, $year, $month, $GLOBALS['dbconnect']); // gets total price for id (-2 is error)
-            if ($total_price == -2) {
-                echo "Error: Total price for id {$id} is -2";
+            if ($total_price == false) {
+                echo "Error: Total price for id {$id} is false<br>";
                 continue;
             }
 
