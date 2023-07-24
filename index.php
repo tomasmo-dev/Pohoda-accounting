@@ -4,6 +4,9 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
+    define('DEBUGGING', true); // if true, displays debug information (var_dump of xmls array)
+    define('LIMIT', 5); // limit of the first querry (for testing purposes) (-1 means no limit)
+
 
     // excluded from git for security reasons
     // mainly contains $dbconnect variable
@@ -218,7 +221,9 @@
     <body>
         <div id="load"></div>
 
-        <h1>RESPONSE LIMITED TO 5 ROWS!</h1>
+        <?php
+        LIMIT == -1 ? "" : "<h1>RESPONSE LIMITED TO ".LIMIT." ROWS!</h1>";
+        ?>
 
         <form method="POST" action="">
             <input type="month" name="date">
@@ -227,13 +232,13 @@
         <br>
         <?php
 
-        if ($dateAssigned) {
-            $xmls = Fill_Xml($year, $month);
-            PrepareDownloads($year, $month, $xmls);
+        if ($dateAssigned) { // test if it is false post / `date` is not set
+            $xmls = Fill_Xml($year, $month); // fill xmls array with invoices and internal invoices
+            PrepareDownloads($year, $month, $xmls); // prepare zip and directory for download
             
             echo '<a href="invoices/zip/'.$year.'-'.$month.'-invoices.zip" download>Stáhnout faktury</a><br><br>';
 
-            DisplayDebugInformation($xmls);
+            ((DEBUGGING == true) ? DisplayDebugInformation($xmls) : "");
         }
         else{
             echo "Žádný měsíc nebyl vybrán!";
@@ -241,11 +246,11 @@
 
         ?>
         <script>
-            if ( window.history.replaceState ) {
+            if ( window.history.replaceState ) { // prevents false postbacks
                 window.history.replaceState( null, null, window.location.href );
             }
 
-            function load(){
+            function load(){ // show loader (called by the submit in the form)
                 document.getElementById("load").style.visibility = "visible";
             }
         </script>

@@ -5,6 +5,8 @@
         $CustIds = array(); // all customer ids
         $ValidCustIds = array(); // customer ids with non zero amount to pay
 
+        $Limit = LIMIT == -1 ? "" : "LIMIT ".LIMIT;
+
         $sql = 
         'SELECT DISTINCT d.cust_ID, MONTH(d.dispend) AS month, YEAR(d.dispend) AS year, d.dispapt '.
             'FROM system.qb_revenue_items i '.
@@ -12,7 +14,7 @@
             'WHERE business_unit = \'CZ\' '.
                 'AND MONTH(dispend) = ? AND YEAR(dispend) = ? '.
                 'AND i.item_type NOT IN (\'FX\', \'H\', \'X\', \'Z\') '.
-                'GROUP BY d.cust_ID, d.dispapt LIMIT 10; ';
+                'GROUP BY d.cust_ID, d.dispapt '.$Limit.'; ';
 
         $stmt = $connection->prepare($sql);
 
