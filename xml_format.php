@@ -1,9 +1,9 @@
 <?php
 // TODO - change header to a assoc array and create constructor for it
-function RetrieveXml($invoice_id, $varSym, $invoice_created_d, $invoice_date, $invoice_acc_d, $invoice_due_date, 
+function RetrieveXml($invoice_id, $varSym, $invoice_created_d, $invoice_date, $invoice_acc_d, $dateKHDPH, $invoice_due_date, 
                      $custId, $description, $acc_company_name, $acc_full_name,
                      $acc_city, $acc_address, $acc_zip, $acc_ico, $acc_vat,
-                     $invoice_items)
+                     $invoice_items, $total_price)
 {
 // varsym = YEARMONTHID
 
@@ -16,6 +16,30 @@ $parameterVal = "CZ".$custId;
 $items = GetXmlItems($invoice_items); // array of string items
 $items_string = implode("\n", $items); // concatonates items with newlines
 
+$VAT_CLASSIFICATION_SUB10K = "UDA5"; // if total price is less than 10k, use this
+$VAT_CLASSIFICATION_OVER10K = "UDA4"; // if total price is more than or equal to 10k, use this
+$PRICE_CONSTANT = 10000; // constant for price comparison
+
+$VAT_classification = ($total_price >= $PRICE_CONSTANT) ? $VAT_CLASSIFICATION_OVER10K : $VAT_CLASSIFICATION_SUB10K; // if total price is more than or equal to 10k, use this
+
+$company_flag = ""; // if company is not from cz then USregEU
+                    // if company is from cz then ???
+                    // if there is no company then keep empty ???
+
+if ($acc_vat != "") {
+    
+    if (substr($acc_vat, 0, 2) == "CZ") {
+        $company_flag = "???";
+    }
+    else
+    {
+        $company_flag = "USregEU";
+    }
+}
+else {
+    $company_flag = "";
+}
+
 $xml = <<<XML_DOC
 <?xml version="1.0" encoding="UTF-8"?>
 <dat:dataPack version="2.0" id="Usr01" ico="{$ico}"  application="atpl" note="import" xmlns:dat="http://www.stormware.cz/schema/version_2/data.xsd" xmlns:inv="http://www.stormware.cz/schema/version_2/invoice.xsd" xmlns:typ="http://www.stormware.cz/schema/version_2/type.xsd" >
@@ -27,12 +51,13 @@ $xml = <<<XML_DOC
                 <inv:date>{$invoice_created_d}</inv:date>
                 <inv:dateTax>{$invoice_date}</inv:dateTax>
                 <inv:dateAccounting>{$invoice_acc_d}</inv:dateAccounting>
+                <int:dateKHDPH>{$dateKHDPH}</int:dateKHDPH>
                 <inv:dateDue>{$invoice_due_date}</inv:dateDue>
                 <inv:accounting>
                     <typ:ids>602LETSKOLA</typ:ids>
                 </inv:accounting>
                 <inv:classificationVAT>
-                    <typ:ids>UDA5</typ:ids>
+                    <typ:ids>{$VAT_classification}</typ:ids>
                 </inv:classificationVAT>
                 <inv:centre>
                     <typ:ids>ATO</typ:ids>

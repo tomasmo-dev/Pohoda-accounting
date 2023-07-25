@@ -214,7 +214,7 @@
         {
             $ico_dic_found = false;
             while ($row = $result->fetch_assoc()) {
-                if ($row['ICO'] != "" && $row['DIC'] != "") {
+                if ($row['DIC'] != "") {
                     $ico_dic_found = true;
                     $ico_dic = array($row['ICO'], $row['DIC']);
                     break;

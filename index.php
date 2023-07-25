@@ -76,15 +76,18 @@
             $ico = $ico_dic[0];
             $vat = $ico_dic[1];
 
-            $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d, $invoice_d,
-                                       $id, $description, $company_name, 
-                                       $full_name, $city, $address, $zip, $ico, $vat, $invoice_items); // creates xml
-
             $total_price = GetTotalPrice($id, $year, $month, $GLOBALS['dbconnect']); // gets total price for id (-2 is error)
             if ($total_price === false) {
                 echo "Error: Total price for id {$id} is false<br>";
                 continue;
             }
+
+            $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d, $invoice_d, $invoice_d,
+                                       $id, $description, $company_name, 
+                                       $full_name, $city, $address, $zip, $ico, $vat, $invoice_items, 
+                                       $total_price); // creates xml
+
+            
 
             $internal_p_final = 0; // final price for internal invoice
             $internal_xml = ""; // internal invoice xml
