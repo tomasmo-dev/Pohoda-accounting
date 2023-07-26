@@ -22,22 +22,12 @@ $PRICE_CONSTANT = 10000; // constant for price comparison
 
 $VAT_classification = ($total_price >= $PRICE_CONSTANT) ? $VAT_CLASSIFICATION_OVER10K : $VAT_CLASSIFICATION_SUB10K; // if total price is more than or equal to 10k, use this
 
-$company_flag = ""; // if company is not from cz then USregEU
-                    // if company is from cz then ???
-                    // if there is no company then keep empty ???
-
-if ($acc_vat != "") {
-    
-    if (substr($acc_vat, 0, 2) == "CZ") {
-        $company_flag = "???";
-    }
-    else
+if ($acc_vat != "") 
+{
+    if (substr($acc_vat, 0, 2) != "CZ") // if dico is not from cz add this vat classification
     {
-        $company_flag = "USregEU";
+        $VAT_classification = "USregEU";
     }
-}
-else {
-    $company_flag = "";
 }
 
 $xml = <<<XML_DOC

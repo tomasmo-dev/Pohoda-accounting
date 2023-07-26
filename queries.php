@@ -221,6 +221,30 @@
                 }
             }
 
+            $stmt->close();
+
+            if (!$ico_dic_found) { // try to fetch atleast ico when dic not present
+                $stmt = $connection->prepare($sql);
+                $stmt->bind_param("s", $myfboId);
+
+                $stmt->execute();
+
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 1)
+                {
+                    while ($row = $result->fetch_assoc()) {
+                        if ($row['ICO'] != "") {
+                            $ico_dic_found = true;
+                            $ico_dic = array($row['ICO'], $row['DIC']);
+                            break;
+                        }
+                    }
+                }
+
+                $stmt->close();
+            }
+
 
             return $ico_dic_found == true ? $ico_dic : array("", ""); // if ico & dic not found return empty array
         }
