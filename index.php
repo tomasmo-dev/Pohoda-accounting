@@ -1,11 +1,14 @@
 <?php
-    // error reporting
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
 
     define('DEBUGGING', true); // if true, displays debug information (var_dump of xmls array)
     define('LIMIT', 20); // limit of the first querry (for testing purposes) (-1 means no limit)
+
+    if (DEBUGGING) {
+        // error reporting
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+    }
 
 
     // excluded from git for security reasons
