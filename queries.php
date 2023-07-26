@@ -193,7 +193,7 @@
     // myfbo id = "CZ{$custId}"
     function GetICO_DIC($myfboId, $connection) // try to get ico & dic from pohoda_adresar
     {
-        $ico_dic = array();
+        $ico_dic = array("", "");
 
         $sql = "SELECT * FROM system.pohoda_adresar WHERE VPrMyFboID = ?;";
         $stmt = $connection->prepare($sql);
