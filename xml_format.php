@@ -41,7 +41,7 @@ $xml = <<<XML_DOC
                 <inv:date>{$invoice_created_d}</inv:date>
                 <inv:dateTax>{$invoice_date}</inv:dateTax>
                 <inv:dateAccounting>{$invoice_acc_d}</inv:dateAccounting>
-                <int:dateKHDPH>{$dateKHDPH}</int:dateKHDPH>
+                <inv:dateKHDPH>{$dateKHDPH}</inv:dateKHDPH>
                 <inv:dateDue>{$invoice_due_date}</inv:dateDue>
                 <inv:accounting>
                     <typ:ids>602LETSKOLA</typ:ids>
