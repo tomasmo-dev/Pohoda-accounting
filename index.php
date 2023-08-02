@@ -1,7 +1,7 @@
 <?php
 
     define('DEBUGGING', true); // if true, displays debug information (var_dump of xmls array)
-    define('LIMIT', 20); // limit of the first querry (for testing purposes) (-1 means no limit)
+    define('LIMIT', -1); // limit of the first querry (for testing purposes) (-1 means no limit)
 
     if (DEBUGGING) {
         // error reporting
