@@ -29,6 +29,10 @@ if ($acc_vat != "")
         $VAT_classification = "USregEU";
     }
 }
+else
+{
+    $VAT_classification = $VAT_CLASSIFICATION_SUB10K; // if no vat classification is provided, use this
+}
 
 $xml = <<<XML_DOC
 <?xml version="1.0" encoding="UTF-8"?>
