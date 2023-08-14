@@ -57,7 +57,11 @@
 
             if ($result_Amount->num_rows > 0) {
                 while($row_Amount = $result_Amount->fetch_assoc()) {
-                    if ($row_Amount["exbe"] + $row_Amount["stax"] > 0) { // if amount to pay is non zero
+                    if (($row_Amount["exbe"] + $row_Amount["stax"]) == 0) {
+                        continue;
+                    } // if amount to pay is non zero
+                    else
+                    {
                         array_push($ValidCustIds, $custId);
                     }
                 }
