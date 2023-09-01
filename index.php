@@ -26,11 +26,17 @@
 
     $dateAssigned = false; // flag if post request is valid
 
-    if (isset($_POST['date'])) {
+    // available values for invoice_type: invoice, internal
+    // from the form radio buttons
+    $invoice_type = "invoice"; // default invoice type
+
+    if (  isset($_POST['date']) && isset($_POST['invoice_type'])  ) {
         $dateAssigned = true;
 
-        if ($_POST['date'] != "") {
+        if ($_POST['date'] != "" && $_POST['invoice_type'] != "") {
             
+            $invoice_type = $_POST['invoice_type'];
+
             $date = DateTime::createFromFormat('Y-m', $_POST['date']);
             
             $month = $date->format('m');
@@ -127,6 +133,93 @@
         );
 
         return $final;
+    }
+
+    function NewPrepareDownloads($year, $month, $xmls)
+    {
+        $dir_prefix = "{$year}-{$month}-";
+
+        $dir_invoices = "invoices/raw/{$dir_prefix}invoices";
+        $dir_internals = "invoices/raw/{$dir_prefix}internals";
+        $dir = '';
+
+        $zip_dir_invoices = "invoices/zip/{$dir_prefix}invoices.zip";
+        $zip_dir_internals = "invoices/zip/{$dir_prefix}internals.zip";
+        $zip_dir = '';
+
+        // overwrite existing directory
+        if ($GLOBALS['invoice_type'] == 'invoice')
+        {
+            if (file_exists($dir_invoices)) {
+                rrmdir($dir_invoices);
+            }
+            if (file_exists($zip_dir_invoices)) {
+                unlink($zip_dir_invoices);
+            }
+
+            $dir = $dir_invoices;
+            $zip_dir = $zip_dir_invoices;
+        }
+        else if ($GLOBALS['invoice_type'] == 'internal')
+        {
+            if (file_exists($dir_internals)) {
+                rrmdir($dir_internals);
+            }
+            if (file_exists($zip_dir_internals)) {
+                unlink($zip_dir_internals);
+            }
+
+            $dir = $dir_internals;
+            $zip_dir = $zip_dir_internals;
+        }
+        else
+        {
+            echo '<br>Error: Invalid invoice type!<br>';
+            echo 'Error encountered in PrepareDownloads() function<br>';
+            return;
+        }
+
+        mkdir($dir, 0777, true);
+
+        $invoices = $xmls['invoices'];
+        $internal = $xmls['internal'];
+
+        $zip = new ZipArchive;
+        $zip->open($zip_dir, ZipArchive::CREATE);
+
+        if ($GLOBALS['invoice_type'] == 'invoice')
+        {
+            // create all invoices in directory and add then to a zip file
+            foreach ($invoices as $id => $xml){
+                $file_name = "{$id}-invoice.xml";
+                $file_path = "{$dir}".DIRECTORY_SEPARATOR."{$file_name}";
+    
+                $file = fopen($file_path, "w");
+                fwrite($file, $xml);
+                fclose($file);
+    
+                $zip->addFile($file_path, $file_name);
+            }
+        }
+        else if ($GLOBALS['invoice_type'] == 'internal')
+        {
+            // create all internal invoices in directory and add then to a zip file
+            foreach ($internal as $id => $xml) {
+                $file_name = "{$id}-internal.xml";
+                $file_path = "{$dir}".DIRECTORY_SEPARATOR."{$file_name}";
+    
+                if ($xml != "") // if there is no internal invoice, don't create file
+                {
+                    $file = fopen($file_path, "w");
+                    fwrite($file, $xml);
+                    fclose($file);
+        
+                    $zip->addFile($file_path, $file_name);
+                }
+            }
+        }
+
+        $zip->close();
     }
 
     function PrepareDownloads($year, $month, $xmls)
@@ -233,6 +326,13 @@
 
         <form method="POST" action="">
             <input type="month" name="date">
+            
+            <label for="invoice">Faktury</label>
+            <input type="radio" id="invoice" name="invoice_type" value="invoice" checked>
+
+            <label for="internal">Interní Doklady</label>
+            <input type="radio" id="internal" name="invoice_type" value="internal">
+
             <input type="submit" value="Odeslat" onclick="load()">
         </form>
         <br>
