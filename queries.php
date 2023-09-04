@@ -263,6 +263,43 @@
         return $ico_dic;
     }
 
+    function InvoicesPohodaImport($connection, $year, $month, $varsym, $bal, $amount)
+    {
+        $sql_check = "SELECT * FROM system.pohoda_import WHERE variable_symbol = ? AND balance = ? AND amount = ? AND year = ? AND month = ?;";
+        $sql_insert = "INSERT INTO system.pohoda_import (variable_symbol, balance, amount, created_d, year, month) VALUES (?, ?, ?, NOW(), ?, ?);";
+
+        $stmt_check = $connection->prepare($sql_check);
+        $stmt_check->bind_param("sssss", $varsym, $bal, $amount, $year, $month);
+
+        $stmt_check->execute();
+
+        $result = $stmt_check->get_result();
+
+        if ($result->num_rows > 0) {
+            //echo "Invoice already exists";
+            return;
+        }
+
+        $stmt_check->close();
+
+        // check complete, insert invoice
+
+        $stmt_insert = $connection->prepare($sql_insert);
+        $stmt_insert->bind_param("sssss", $varsym, $bal, $amount, $year, $month);
+
+        $stmt_insert->execute();
+
+        $stmt_insert->close();
+        
+
+        $stmt_insert = $connection->prepare($sql_insert);
+        $stmt_insert->bind_param("sssss", $varsym, $bal, $amount, $year, $month);
+
+        $stmt_insert->execute();
+
+        $stmt_insert->close();
+    }
+
     function IndexDb($connection) // indexes tables so queries are faster
     {
         $connection->query("ALTER TABLE `system`.`qb_revenue_items`

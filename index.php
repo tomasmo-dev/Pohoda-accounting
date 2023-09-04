@@ -91,6 +91,12 @@
                 continue;
             }
 
+            if ($GLOBALS['invoice_type'] == 'invoice')
+            {
+                InvoicesPohodaImport($GLOBALS['dbconnect'], $year, $month, $varSym, $info['PrepayBalance'], $total_price); // updates pohoda_import (adds new invoice)
+
+            }
+
             $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d, $invoice_d, $invoice_d,
                                        $id, $description, $company_name, 
                                        $full_name, $city, $address, $zip, $ico, $vat, $invoice_items, 
@@ -330,6 +336,8 @@
             <label for="invoice">Faktury</label>
             <input type="radio" id="invoice" name="invoice_type" value="invoice" checked>
 
+            <br>
+
             <label for="internal">Interní Doklady</label>
             <input type="radio" id="internal" name="invoice_type" value="internal">
 
@@ -340,9 +348,16 @@
 
         if ($dateAssigned) { // test if it is false post / `date` is not set
             $xmls = Fill_Xml($year, $month); // fill xmls array with invoices and internal invoices
-            PrepareDownloads($year, $month, $xmls); // prepare zip and directory for download
+            NewPrepareDownloads($year, $month, $xmls); // prepare zip and directory for download
             
-            echo '<a href="invoices/zip/'.$year.'-'.$month.'-invoices.zip" download>Stáhnout faktury</a><br><br>';
+            if ($invoice_type == 'invoice')
+            {
+                echo '<a href="invoices/zip/'.$year.'-'.$month.'-invoices.zip" download>Stáhnout faktury</a><br><br>';
+            }
+            else if ($invoice_type == 'internal')
+            {
+                echo '<a href="invoices/zip/'.$year.'-'.$month.'-internals.zip" download>Stáhnout interní doklady</a><br><br>';
+            }
 
             ((DEBUGGING == true) ? DisplayDebugInformation($xmls) : "");
         }
