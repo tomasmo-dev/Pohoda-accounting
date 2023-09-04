@@ -333,6 +333,8 @@
         <form method="POST" action="">
             <input type="month" name="date">
             
+            <br>
+
             <label for="invoice">Faktury</label>
             <input type="radio" id="invoice" name="invoice_type" value="invoice" checked>
 
