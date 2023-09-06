@@ -343,6 +343,8 @@
             <label for="internal">Interní Doklady</label>
             <input type="radio" id="internal" name="invoice_type" value="internal">
 
+            <br>
+
             <input type="submit" value="Odeslat" onclick="load()">
         </form>
         <br>

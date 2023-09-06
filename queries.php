@@ -265,7 +265,8 @@
 
     function InvoicesPohodaImport($connection, $year, $month, $varsym, $bal, $amount)
     {
-        $sql_check = "SELECT * FROM system.pohoda_import WHERE variable_symbol = ? AND balance = ? AND amount = ? AND year = ? AND month = ?;";
+        $sql_check = "SELECT * FROM system.pohoda_import WHERE variable_symbol = ? AND year = ? AND month = ?;";
+        $sql_update = "UPDATE SET balance = ?, amount = ? WHERE variable_symbol = ? AND year = ? AND month = ?;";
         $sql_insert = "INSERT INTO system.pohoda_import (variable_symbol, balance, amount, created_d, year, month) VALUES (?, ?, ?, NOW(), ?, ?);";
 
         $stmt_check = $connection->prepare($sql_check);
@@ -277,6 +278,14 @@
 
         if ($result->num_rows > 0) {
             //echo "Invoice already exists";
+            $stmt_check->close();
+
+            $stmt_update = $connection->prepare($sql_update);
+            $stmt_update->bind_param("sssss", $bal, $amount, $varsym, $year, $month);
+
+            $stmt_update->execute();
+
+            $stmt_update->close();
             return;
         }
 
