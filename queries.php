@@ -298,7 +298,7 @@
     function InvoicesPohodaImport($connection, $custId, $year, $month, $varsym, $bal, $amount)
     {
         $sql_check = "SELECT * FROM system.pohoda_import WHERE variable_symbol = ? AND year = ? AND month = ?;";
-        $sql_update = "UPDATE SET balance = ?, amount = ? WHERE variable_symbol = ? AND year = ? AND month = ?;";
+        $sql_update = "UPDATE system.pohoda_import SET balance = ?, amount = ? WHERE variable_symbol = ? AND year = ? AND month = ?;";
         $sql_insert = "INSERT INTO system.pohoda_import (variable_symbol, balance, amount, created_d, year, month, customer_id) VALUES (?, ?, ?, NOW(), ?, ?, ?);";
 
         $stmt_check = $connection->prepare($sql_check);
@@ -313,7 +313,7 @@
             $stmt_check->close();
 
             $stmt_update = $connection->prepare($sql_update);
-            $stmt_update->bind_param("sssss", $bal, $amount, $varsym, $year, $month);
+            $stmt_update->bind_param("ddsss", $bal, $amount, $varsym, $year, $month);
 
             $stmt_update->execute();
 
@@ -326,7 +326,7 @@
         // check complete, insert invoice        
 
         $stmt_insert = $connection->prepare($sql_insert);
-        $stmt_insert->bind_param("ssssss", $varsym, $bal, $amount, $year, $month, $custId);
+        $stmt_insert->bind_param("sddsss", $varsym, $bal, $amount, $year, $month, $custId);
 
         $stmt_insert->execute();
 
