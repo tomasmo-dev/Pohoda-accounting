@@ -274,7 +274,7 @@
         $sql_insert = "INSERT INTO system.pohoda_import (variable_symbol, balance, amount, created_d, year, month) VALUES (?, ?, ?, NOW(), ?, ?);";
 
         $stmt_check = $connection->prepare($sql_check);
-        $stmt_check->bind_param("sssss", $varsym, $bal, $amount, $year, $month);
+        $stmt_check->bind_param("sss", $varsym, $year, $month);
 
         $stmt_check->execute();
 
