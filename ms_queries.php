@@ -6,7 +6,6 @@
 // if false is returned it means that the query returned no rows or connection failed
 function SelectVarsym($varsym, $bal, $amount, $verbose=true)
 {
-    echo $verbose == true ? "<br>" : "";
 
     $ms_con = $GLOBALS['ms_con'];
 
