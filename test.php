@@ -8,10 +8,10 @@
         $varsym = $_POST['varsym'];
         echo "POST varsym: " . $varsym . "<br>";
 
-        $sql = "SELECT * FROM FA WHERE Varsym = :varsym";
+        $sql = "SELECT TOP 10 * FROM FA";
 
         $stmt = $ms_con->prepare($sql);
-        $stmt->bindParam(':varsym', $varsym, PDO::PARAM_STR);
+        //$stmt->bindParam(':varsym', $varsym, PDO::PARAM_STR);
 
         $stmt->execute();
 
