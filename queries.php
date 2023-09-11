@@ -1,4 +1,8 @@
 <?php
+// group of queries for MySql Server ( connection created in pohoda_db.php )
+// connection var: $dbconnect
+// connection verified in pohoda_db.php
+
 
     // returns an array of customer ids for given month and year
     function GetCustIds($year, $month, $connection){

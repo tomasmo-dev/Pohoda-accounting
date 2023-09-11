@@ -94,45 +94,51 @@
             if ($GLOBALS['invoice_type'] == 'invoice')
             {
                 InvoicesPohodaImport($GLOBALS['dbconnect'], $year, $month, $varSym, $info['PrepayBalance'], $total_price); // updates pohoda_import (adds new invoice)
+                
+                
+                $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d, $invoice_d, $invoice_d,
+                                           $id, $description, $company_name, 
+                                           $full_name, $city, $address, $zip, $ico, $vat, $invoice_items, 
+                                           $total_price); // creates xml
 
             }
-
-            $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d, $invoice_d, $invoice_d,
-                                       $id, $description, $company_name, 
-                                       $full_name, $city, $address, $zip, $ico, $vat, $invoice_items, 
-                                       $total_price); // creates xml
 
             
-
-            $internal_p_final = 0; // final price for internal invoice
-            $internal_xml = ""; // internal invoice xml
-
-            $internal_price = $total_price; // for clarity purposes
-            $balance = $info['PrepayBalance']; // balance for client
-
-            if ($balance < 0 && abs($balance) > $internal_price)
+            if ($GLOBALS['invoice_type'] == 'internal')
             {
-                $internal_xml = "";
-            }
-            else if ($balance < 0) // if balance is negative, add it to price
-            {
-                $internal_p_final = $internal_price + $balance;
 
-                $internal_xml = RetrieveInternalXml($year, $month, $id,
-                                                    $created_d, $invoice_d, $invoice_d, $invoice_d,
-                                                    $full_name, $city, $address, $internal_p_final); // creates internal xml
+                $internal_p_final = 0; // final price for internal invoice
+                $internal_xml = ""; // internal invoice xml
+                
+                $internal_price = $total_price; // for clarity purposes
+                $balance = $info['PrepayBalance']; // balance for client
+                
+                if ($balance < 0 && abs($balance) > $internal_price)
+                {
+                    $internal_xml = "";
+                }
+                else if ($balance < 0) // if balance is negative, add it to price
+                {
+                    $internal_p_final = $internal_price + $balance;
+                    
+                    $internal_xml = RetrieveInternalXml($year, $month, $id,
+                    $created_d, $invoice_d, $invoice_d, $invoice_d,
+                    $full_name, $city, $address, $internal_p_final); // creates internal xml
+                }
+                else
+                {
+                    $internal_p_final = $total_price;
+                    
+                    $internal_xml = RetrieveInternalXml($year, $month, $id,
+                    $created_d, $invoice_d, $invoice_d, $invoice_d,
+                    $full_name, $city, $address, $internal_p_final); // creates internal xml
+                }
             }
-            else
-            {
-                $internal_xml = RetrieveInternalXml($year, $month, $id,
-                                                    $created_d, $invoice_d, $invoice_d, $invoice_d,
-                                                    $full_name, $city, $address, $total_price); // creates internal xml
-            }
-
+            
             $xmls += array($id => $invoice_xml);
             $xmls_internal += array($id => $internal_xml);
         }
-
+        
         $final = array(
             'invoices' => $xmls,
             'internal' => $xmls_internal
