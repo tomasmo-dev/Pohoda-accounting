@@ -3,7 +3,7 @@
 
     $row = null;
 
-    if ($_SERVER['method'] == 'POST')
+    if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
         $varsym = $_POST['varsym'];
 
@@ -65,7 +65,7 @@
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             echo "<pre>";
-            print_r($row);
+            var_dump($row);
             echo "</pre>";
         }
     ?>
