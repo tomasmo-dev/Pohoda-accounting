@@ -12,7 +12,7 @@
                     WHERE VarSym=:varsym";
 
         $stmt = $ms_con->prepare($sql);
-        //$stmt->bindParam(':varsym', $varsym, PDO::PARAM_STR);
+        $stmt->bindParam(':varsym', $varsym, PDO::PARAM_STR);
 
         $stmt->execute();
 
