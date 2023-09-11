@@ -291,15 +291,7 @@
 
         $stmt_check->close();
 
-        // check complete, insert invoice
-
-        $stmt_insert = $connection->prepare($sql_insert);
-        $stmt_insert->bind_param("sssss", $varsym, $bal, $amount, $year, $month);
-
-        $stmt_insert->execute();
-
-        $stmt_insert->close();
-        
+        // check complete, insert invoice        
 
         $stmt_insert = $connection->prepare($sql_insert);
         $stmt_insert->bind_param("sssss", $varsym, $bal, $amount, $year, $month);
