@@ -49,7 +49,8 @@
         }
     }
 
-    function Fill_Xml($year, $month){
+    function Fill_Xml($year, $month)
+    {
         // returns array of user ids for given date
 
         IndexDb($GLOBALS['dbconnect']); // index database for faster queries
@@ -59,55 +60,57 @@
 
         date_default_timezone_set('Europe/Prague');
 
-        $CustIds = GetCustIds($year, $month, $GLOBALS['dbconnect']);
+        if ($GLOBALS['invoice_type'] == 'invoice')
+        {
+            $CustIds = GetCustIds($year, $month, $GLOBALS['dbconnect']);
 
-        foreach ($CustIds as $id) {
-            $info = GetInvoiceInfoForUser($id, $GLOBALS['dbconnect']); // header
-            $invoice_items = GetInvoiceItemsForUser($id, $year, $month, $GLOBALS['dbconnect']); // detail
-
-            $myfboId = "CZ{$id}";
-
-            $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
-            $varSym = $year.$month.$id; // variable symbol
-
-            $created_d = date('Y-m-d'); // today
-            $invoice_d = DateTime::createFromFormat('Y-m-d', "{$year}-{$month}-1")->format('Y-m-t'); // last day of month
-
-            // array of ico and dic from pohoda_adresar (if there is more than one, take first one) ->
-            // -> ico is index 0, dic is index 1
-            $ico_dic = GetICO_DIC($myfboId, $GLOBALS['dbconnect']); // get ico & dic from pohoda_adresar
-
-            $description = "Pilot training";
-
-            $company_name = $info['Organization'];
-            $full_name = $info['FirstName']. ' ' .$info['LastName'];
-            $city = $info['City'];
-            $address = $info['Address1'] . ' ' . $info['Address2'];
-            $zip = $info['ZipCode'];
-            $ico = $ico_dic[0];
-            $vat = $ico_dic[1];
-
-            $total_price = GetTotalPrice($id, $year, $month, $GLOBALS['dbconnect']); // gets total price for id (false is error)
-            if ($total_price === false) {
-                echo "Error: Total price for id {$id} is false<br>";
-                continue;
-            }
-
-            if ($GLOBALS['invoice_type'] == 'invoice')
+            foreach ($CustIds as $id) 
             {
-                InvoicesPohodaImport($GLOBALS['dbconnect'], $id, $year, $month, $varSym, $info['PrepayBalance'], $total_price); // updates pohoda_import (adds new invoice)
-                
-                
-                $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d, $invoice_d, $invoice_d,
-                                           $id, $description, $company_name, 
-                                           $full_name, $city, $address, $zip, $ico, $vat, $invoice_items, 
-                                           $total_price); // creates xml
+                $info = GetInvoiceInfoForUser($id, $GLOBALS['dbconnect']); // header
+                $invoice_items = GetInvoiceItemsForUser($id, $year, $month, $GLOBALS['dbconnect']); // detail
 
+                $myfboId = "CZ{$id}";
+
+                $invoice_id = "{$year}-{$month}-{$id}"; // year-month-cust_id
+                $varSym = $year.$month.$id; // variable symbol
+
+                $created_d = date('Y-m-d'); // today
+                $invoice_d = DateTime::createFromFormat('Y-m-d', "{$year}-{$month}-1")->format('Y-m-t'); // last day of month
+
+                // array of ico and dic from pohoda_adresar (if there is more than one, take first one) ->
+                // -> ico is index 0, dic is index 1
+                $ico_dic = GetICO_DIC($myfboId, $GLOBALS['dbconnect']); // get ico & dic from pohoda_adresar
+
+                $description = "Pilot training";
+
+                $company_name = $info['Organization'];
+                $full_name = $info['FirstName']. ' ' .$info['LastName'];
+                $city = $info['City'];
+                $address = $info['Address1'] . ' ' . $info['Address2'];
+                $zip = $info['ZipCode'];
+                $ico = $ico_dic[0];
+                $vat = $ico_dic[1];
+
+                $total_price = GetTotalPrice($id, $year, $month, $GLOBALS['dbconnect']); // gets total price for id (false is error)
+                if ($total_price === false) {
+                    echo "Error: Total price for id {$id} is false<br>";
+                    continue;
+                }
+
+                
+                    InvoicesPohodaImport($GLOBALS['dbconnect'], $id, $year, $month, $varSym, $info['PrepayBalance'], $total_price); // updates pohoda_import (adds new invoice)
+                    
+                    
+                    $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d, $invoice_d, $invoice_d,
+                                            $id, $description, $company_name, 
+                                            $full_name, $city, $address, $zip, $ico, $vat, $invoice_items, 
+                                            $total_price); // creates xml
+
+                    $xmls += array($id => $invoice_xml);
             }
-            
-            $xmls += array($id => $invoice_xml);
-            //$xmls_internal += array($id => $internal_xml);
         }
+            //$xmls_internal += array($id => $internal_xml);
+    
         
         if ($GLOBALS['invoice_type'] == 'internal')
         {

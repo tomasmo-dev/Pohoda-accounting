@@ -3,7 +3,7 @@
 
     $row = null;
 
-    if ($_SERVER['method'])
+    if ($_SERVER['method'] == 'POST')
     {
         $varsym = $_POST['varsym'];
 
