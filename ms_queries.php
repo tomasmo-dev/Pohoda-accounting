@@ -35,8 +35,14 @@ function SelectVarsym($varsym, $bal, $amount, $verbose=true)
         echo $verbose == true ? "No rows returned for varsym in MSSQL Pohoda: " . $varsym . "<br>" : "";
         return false;
     }
+    else if ($count > 1)
+    {
+        echo $verbose == true ? "Multiple rows returned for varsym in MSSQL Pohoda: " . $varsym . "<br>" : "";
+        return false;
+    }
     else 
     {
+        echo $verbose == true ? "Error in MSSQL Pohoda: " . $varsym . "<br>" : "";
         return false;
     }
 }
