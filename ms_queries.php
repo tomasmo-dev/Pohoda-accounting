@@ -4,10 +4,8 @@
 // connection verified in pohoda_db.php
 
 // if false is returned it means that the query returned no rows or connection failed
-function SelectVarsym($varsym, $bal, $amount, $verbose=true)
+function SelectVarsym($ms_con, $varsym, $bal, $amount, $verbose=true)
 {
-
-    $ms_con = $GLOBALS['ms_con'];
 
     $sql = "SELECT * FROM FA 
                 WHERE VarSym=:varsym"; // check col names they are not correct rn
