@@ -140,7 +140,7 @@
                 $balance = $info['PrepayBalance']; // balance for client
 
                 // gets the invoice date from pohoda mssql server
-                $internal_inv_date = SelectVarsym($GLOBALS['ms_con'], $row['variable_symbol'], $balance, $total_price)[0]['Datum'];
+                $internal_inv_date = SelectVarsym($GLOBALS['ms_con'], $row['variable_symbol'], $balance, $total_price)['Datum'];
 
                     
                 if ($balance < 0 && abs($balance) > $internal_price)
