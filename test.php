@@ -2,7 +2,7 @@
     include_once '../pohoda_db.php';
     include_once './ms_queries.php';
 
-    $sql = "SELECT * FROM FA";
+    $sql = "SELECT * FROM FA LIMIT 100";
 
     $stmt = $ms_con->prepare($sql);
 
