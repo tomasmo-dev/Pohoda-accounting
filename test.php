@@ -11,10 +11,9 @@
         $sql = "SELECT * FROM FA WHERE Varsym = :varsym";
 
         $stmt = $ms_con->prepare($sql);
+        $stmt->bindParam(':varsym', $varsym, PDO::PARAM_STR);
 
-        $stmt->execute([
-            'varsym' => $varsym
-        ]);
+        $stmt->execute();
 
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
