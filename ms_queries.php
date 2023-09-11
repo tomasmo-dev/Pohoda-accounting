@@ -9,16 +9,12 @@ function SelectVarsym($varsym, $bal, $amount)
     $ms_con = $GLOBALS['ms_con'];
 
     $sql = "SELECT * FROM FA 
-                WHERE Varsym=:varsym 
-                AND Bal=:bal
-                AND Amount=:amount"; // check col names they are not correct rn
+                WHERE VarSym=:varsym"; // check col names they are not correct rn
 
     $stmt = $ms_con->prepare($sql);
 
     $stmt->execute([
-        'varsym' => $varsym,
-        'bal' => $bal,
-        'amount' => $amount
+        'varsym' => $varsym
     ]);
 
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
