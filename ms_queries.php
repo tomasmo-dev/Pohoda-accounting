@@ -13,10 +13,9 @@ function SelectVarsym($varsym, $bal, $amount, $verbose=true)
                 WHERE VarSym=:varsym"; // check col names they are not correct rn
 
     $stmt = $ms_con->prepare($sql);
+    $stmt->bindParam(':varsym', $varsym, PDO::PARAM_STR);
 
-    $stmt->execute([
-        'varsym' => $varsym
-    ]);
+    $stmt->execute();
 
     $count = $stmt->rowCount();
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
