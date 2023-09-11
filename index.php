@@ -17,6 +17,8 @@
     include_once '../pohoda_db.php';
     // queries for pohoda database (they are long, so they are in separate file)
     include_once 'queries.php';
+    // queries for ms sql server (they are long & contain error checking logic, so they are in separate file)
+    include_once 'ms_queries.php';
     // includes all functions for working with xml invoices
     include_once 'xml_format.php';
     // includes utility functions
@@ -112,6 +114,8 @@
                 
                 $internal_price = $total_price; // for clarity purposes
                 $balance = $info['PrepayBalance']; // balance for client
+
+                $internal_inv_date = SelectVarsym($varSym, $balance, $total_price)['Datum'];
                 
                 if ($balance < 0 && abs($balance) > $internal_price)
                 {
@@ -122,7 +126,7 @@
                     $internal_p_final = $internal_price + $balance;
                     
                     $internal_xml = RetrieveInternalXml($year, $month, $id,
-                    $created_d, $invoice_d, $invoice_d, $invoice_d,
+                    $internal_inv_date, $internal_inv_date, $internal_inv_date, $internal_inv_date,
                     $full_name, $city, $address, $internal_p_final); // creates internal xml
                 }
                 else
@@ -130,7 +134,7 @@
                     $internal_p_final = $total_price;
                     
                     $internal_xml = RetrieveInternalXml($year, $month, $id,
-                    $created_d, $invoice_d, $invoice_d, $invoice_d,
+                    $internal_inv_date, $internal_inv_date, $internal_inv_date, $internal_inv_date,
                     $full_name, $city, $address, $internal_p_final); // creates internal xml
                 }
             }

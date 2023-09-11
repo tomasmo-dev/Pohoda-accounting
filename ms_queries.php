@@ -31,7 +31,7 @@ function SelectVarsym($varsym, $bal, $amount)
     }
 
     if ($count == 1) {
-        return $row;
+        return $row[0];
     } else {
         return false;
     }
