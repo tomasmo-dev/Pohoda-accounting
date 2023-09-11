@@ -1,6 +1,6 @@
 <?php
     include_once '../pohoda_db.php';
-    include_once './ms_queries.php';
+    //include_once './ms_queries.php';
 
     $sql = "SELECT * FROM FA LIMIT 100";
 
