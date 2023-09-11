@@ -15,12 +15,17 @@ function SelectVarsym($ms_con, $varsym, $bal, $amount, $verbose=true)
 
     $stmt->execute();
 
-    $count = $stmt->rowCount();
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if (!$row)
     {
         return false;
+    }
+
+    $count = 0;
+    foreach ($row as $r)
+    {
+        $count++;
     }
 
     echo "Count: $count<br>";
