@@ -2,11 +2,11 @@
     include_once '../pohoda_db.php';
     //include_once './ms_queries.php';
 
-    $sql = "SELECT * FROM FA LIMIT 100";
+    $sql = "SELECT TOP 100 * FROM FA";
 
     $stmt = $ms_con->prepare($sql);
 
-    $stmt->execute();
+    $success = $stmt->execute();
 
     echo "Query stmt normal: " . $sql . "<br><pre>";
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
