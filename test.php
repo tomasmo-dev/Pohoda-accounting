@@ -6,6 +6,7 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST')
     {
         $varsym = $_POST['varsym'];
+        echo "POST varsym: " . $varsym . "<br>";
 
         $sql = "SELECT * FROM FA WHERE Varsym = :varsym";
 
@@ -64,6 +65,8 @@
     <?php
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
         {
+            echo 'POST <br>';
+
             echo "<pre>";
             var_dump($row);
             echo "</pre>";
