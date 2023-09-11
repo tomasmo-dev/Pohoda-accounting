@@ -3,6 +3,34 @@
 // connection var: $dbconnect
 // connection verified in pohoda_db.php
 
+    // get all rows from pohoda_import table for given year and month
+    // returns an array of assoc arrays
+    // if none are found empty array is returned
+    // (empty array is also probably returned if error occurs)
+    function GetInternalRecords($connection, $year, $month)
+    {
+        $sql = "SELECT * FROM system.pohoda_import WHERE year = ? AND month = ?;";
+
+        $stmt = $connection->prepare($sql);
+
+        $stmt->bind_param("ss", $year, $month);
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $rows = array();
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                array_push($rows, $row);
+            }
+        }
+
+        $stmt->close();
+
+        return $rows;
+    }
 
     // returns an array of customer ids for given month and year
     function GetCustIds($year, $month, $connection){
@@ -267,11 +295,11 @@
         return $ico_dic;
     }
 
-    function InvoicesPohodaImport($connection, $year, $month, $varsym, $bal, $amount)
+    function InvoicesPohodaImport($connection, $custId, $year, $month, $varsym, $bal, $amount)
     {
         $sql_check = "SELECT * FROM system.pohoda_import WHERE variable_symbol = ? AND year = ? AND month = ?;";
         $sql_update = "UPDATE SET balance = ?, amount = ? WHERE variable_symbol = ? AND year = ? AND month = ?;";
-        $sql_insert = "INSERT INTO system.pohoda_import (variable_symbol, balance, amount, created_d, year, month) VALUES (?, ?, ?, NOW(), ?, ?);";
+        $sql_insert = "INSERT INTO system.pohoda_import (variable_symbol, balance, amount, created_d, year, month, customer_id) VALUES (?, ?, ?, NOW(), ?, ?, ?);";
 
         $stmt_check = $connection->prepare($sql_check);
         $stmt_check->bind_param("sss", $varsym, $year, $month);
@@ -298,7 +326,7 @@
         // check complete, insert invoice        
 
         $stmt_insert = $connection->prepare($sql_insert);
-        $stmt_insert->bind_param("sssss", $varsym, $bal, $amount, $year, $month);
+        $stmt_insert->bind_param("ssssss", $varsym, $bal, $amount, $year, $month, $custId);
 
         $stmt_insert->execute();
 

@@ -87,7 +87,7 @@
             $ico = $ico_dic[0];
             $vat = $ico_dic[1];
 
-            $total_price = GetTotalPrice($id, $year, $month, $GLOBALS['dbconnect']); // gets total price for id (-2 is error)
+            $total_price = GetTotalPrice($id, $year, $month, $GLOBALS['dbconnect']); // gets total price for id (false is error)
             if ($total_price === false) {
                 echo "Error: Total price for id {$id} is false<br>";
                 continue;
@@ -95,7 +95,7 @@
 
             if ($GLOBALS['invoice_type'] == 'invoice')
             {
-                InvoicesPohodaImport($GLOBALS['dbconnect'], $year, $month, $varSym, $info['PrepayBalance'], $total_price); // updates pohoda_import (adds new invoice)
+                InvoicesPohodaImport($GLOBALS['dbconnect'], $id, $year, $month, $varSym, $info['PrepayBalance'], $total_price); // updates pohoda_import (adds new invoice)
                 
                 
                 $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d, $invoice_d, $invoice_d,
@@ -104,19 +104,41 @@
                                            $total_price); // creates xml
 
             }
-
             
-            if ($GLOBALS['invoice_type'] == 'internal')
+            $xmls += array($id => $invoice_xml);
+            //$xmls_internal += array($id => $internal_xml);
+        }
+        
+        if ($GLOBALS['invoice_type'] == 'internal')
+        {
+            // gets all records from pohoda_import for given month & year
+            $PohodaImportRows = GetInternalRecords($GLOBALS['dbconnect'], $year, $month);
+
+            foreach ($PohodaImportRows as $row)
             {
+                $id = $row['customer_id']; // customer id from pohoda_import database for looking up additional information
+                $info = GetInvoiceInfoForUser($id, $GLOBALS['dbconnect']); // header ( additional information )
+
+                $full_name = $info['FirstName']. ' ' .$info['LastName'];
+                $city = $info['City'];
+                $address = $info['Address1'] . ' ' . $info['Address2'];
+
+                // gets total price for id (false is error)
+                $total_price = GetTotalPrice($id, $year, $month, $GLOBALS['dbconnect']); 
+                if ($total_price === false) {
+                    echo "Error: Total price for id {$id} is false<br>";
+                    continue;
+                }
 
                 $internal_p_final = 0; // final price for internal invoice
                 $internal_xml = ""; // internal invoice xml
-                
+                    
                 $internal_price = $total_price; // for clarity purposes
                 $balance = $info['PrepayBalance']; // balance for client
 
-                $internal_inv_date = SelectVarsym($varSym, $balance, $total_price)['Datum'];
-                
+                // gets the invoice date from pohoda mssql server
+                $internal_inv_date = SelectVarsym($row['variable_symbol'], $balance, $total_price)['Datum'];
+                    
                 if ($balance < 0 && abs($balance) > $internal_price)
                 {
                     $internal_xml = "";
@@ -124,7 +146,7 @@
                 else if ($balance < 0) // if balance is negative, add it to price
                 {
                     $internal_p_final = $internal_price + $balance;
-                    
+                        
                     $internal_xml = RetrieveInternalXml($year, $month, $id,
                     $internal_inv_date, $internal_inv_date, $internal_inv_date, $internal_inv_date,
                     $full_name, $city, $address, $internal_p_final); // creates internal xml
@@ -132,17 +154,16 @@
                 else
                 {
                     $internal_p_final = $total_price;
-                    
+                        
                     $internal_xml = RetrieveInternalXml($year, $month, $id,
                     $internal_inv_date, $internal_inv_date, $internal_inv_date, $internal_inv_date,
                     $full_name, $city, $address, $internal_p_final); // creates internal xml
                 }
+
+                $xmls_internal += array($id => $internal_xml);
             }
-            
-            $xmls += array($id => $invoice_xml);
-            $xmls_internal += array($id => $internal_xml);
         }
-        
+
         $final = array(
             'invoices' => $xmls,
             'internal' => $xmls_internal
