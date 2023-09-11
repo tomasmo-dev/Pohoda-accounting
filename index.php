@@ -140,7 +140,12 @@
                 $balance = $info['PrepayBalance']; // balance for client
 
                 // gets the invoice date from pohoda mssql server
-                $internal_inv_date = SelectVarsym($row['variable_symbol'], $balance, $total_price)['Datum'];
+                $internal_inv_date = SelectVarsym($row['variable_symbol'], $balance, $total_price);
+                if ($internal_inv_date === false) {
+                    echo "Error: Internal invoice date for id {$id} is false<br>";
+                    continue;
+                }
+                $internal_inv_date = $internal_inv_date['Datum'];
                     
                 if ($balance < 0 && abs($balance) > $internal_price)
                 {

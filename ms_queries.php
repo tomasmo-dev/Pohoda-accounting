@@ -33,6 +33,7 @@ function SelectVarsym($varsym, $bal, $amount, $verbose=true)
     else if ($count == 0)
     {
         echo $verbose == true ? "No rows returned for varsym in MSSQL Pohoda: " . $varsym . "<br>" : "";
+        return false;
     }
     else 
     {
