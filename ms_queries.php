@@ -4,8 +4,10 @@
 // connection verified in pohoda_db.php
 
 // if false is returned it means that the query returned no rows or connection failed
-function SelectVarsym($varsym, $bal, $amount)
+function SelectVarsym($varsym, $bal, $amount, $verbose=true)
 {
+    echo $verbose == true ? "<br>" : "";
+
     $ms_con = $GLOBALS['ms_con'];
 
     $sql = "SELECT * FROM FA 
@@ -17,6 +19,7 @@ function SelectVarsym($varsym, $bal, $amount)
         'varsym' => $varsym
     ]);
 
+    $count = $stmt->rowCount();
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if (!$row)
@@ -24,14 +27,16 @@ function SelectVarsym($varsym, $bal, $amount)
         return false;
     }
 
-    $count = 0;
-    foreach ($row as $key => $assocArr) {
-        $count++;
-    }
 
     if ($count == 1) {
         return $row[0];
-    } else {
+    } 
+    else if ($count == 0)
+    {
+        echo $verbose == true ? "No rows returned for varsym in MSSQL Pohoda: " . $varsym . "<br>" : "";
+    }
+    else 
+    {
         return false;
     }
 }
