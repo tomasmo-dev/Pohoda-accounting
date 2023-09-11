@@ -14,7 +14,7 @@
         echo "\n";
     }
     echo "</pre><br><br>";
-/*
+
     $stmt = $ms_con->prepare($sql);
 
     $stmt->execute();
@@ -24,5 +24,5 @@
     echo "Query stmt fetchAll: " . $sql . "<br><pre>";
     print_r($data);
     echo "</pre><br><br>";
-*/
+
 ?>
