@@ -23,6 +23,7 @@ function SelectVarsym($ms_con, $varsym, $bal, $amount, $verbose=true)
         return false;
     }
 
+    echo "Count: $count<br>";
 
     if ($count == 1) {
         return $row[0];
