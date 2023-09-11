@@ -2,7 +2,7 @@
     include_once '../pohoda_db.php';
     //include_once './ms_queries.php';
 
-    $sql = "SELECT TOP 100 * FROM FA";
+    $sql = "SELECT TOP 1 * FROM FA";
 
     $stmt = $ms_con->prepare($sql);
 

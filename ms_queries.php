@@ -20,9 +20,17 @@ function SelectVarsym($varsym, $bal, $amount)
 
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    if (!$row)
+    {
+        return false;
+    }
 
+    $count = 0;
+    foreach ($row as $key => $assocArr) {
+        $count++;
+    }
 
-    if ($row) {
+    if ($count == 1) {
         return $row;
     } else {
         return false;
