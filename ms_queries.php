@@ -28,8 +28,6 @@ function SelectVarsym($ms_con, $varsym, $bal, $amount, $verbose=true)
         $count++;
     }
 
-    echo "Count: $count<br>";
-
     if ($count == 1) {
         return $row[0];
     } 
