@@ -32,14 +32,17 @@
     // from the form radio buttons
     $invoice_type = "invoice"; // default invoice type
 
-    if (  isset($_POST['date']) && isset($_POST['invoice_type'])  ) {
+    if (  isset($_POST['date']) && isset($_POST['date-inv']) && isset($_POST['invoice_type'])  ) {
         $dateAssigned = true;
 
-        if ($_POST['date'] != "" && $_POST['invoice_type'] != "") {
+        if ($_POST['date'] != "" && $_POST['date-inv'] != "" && $_POST['invoice_type'] != "") {
             
             $invoice_type = $_POST['invoice_type'];
 
-            $date = DateTime::createFromFormat('Y-m', $_POST['date']);
+            $date = DateTime::createFromFormat('m/d/Y', $_POST['date']); // <- input type date format
+            //$date = DateTime::createFromFormat('Y-m', $_POST['date']); // <- this is type month format
+
+            $date_inv = DateTime::createFromFormat('m/d/Y', $_POST['date-inv']);
             
             $month = $date->format('m');
             $year = $date->format('Y');
@@ -75,11 +78,15 @@
                 $varSym = $year.$month.$id; // variable symbol
 
                 $created_d = date('Y-m-d'); // today
-                $invoice_d = DateTime::createFromFormat('Y-m-d', "{$year}-{$month}-1")->format('Y-m-t'); // last day of month
+                $invoice_d = DateTime::createFromFormat('Y-m-d', "{$year}-{$month}-1")->format('Y-m-t'); // first day of month
+                
+                $date_inv = $GLOBALS['date_inv'];
 
                 // array of ico and dic from pohoda_adresar (if there is more than one, take first one) ->
                 // -> ico is index 0, dic is index 1
                 $ico_dic = GetICO_DIC($myfboId, $GLOBALS['dbconnect']); // get ico & dic from pohoda_adresar
+
+
 
                 $description = "Pilot training";
 
@@ -101,10 +108,11 @@
                     InvoicesPohodaImport($GLOBALS['dbconnect'], $id, $year, $month, $varSym, $info['PrepayBalance'], $total_price); // updates pohoda_import (adds new invoice)
                     
                     
-                    $invoice_xml = RetrieveXml($invoice_id, $varSym, $created_d, $invoice_d, $invoice_d, $invoice_d, $invoice_d,
-                                            $id, $description, $company_name, 
-                                            $full_name, $city, $address, $zip, $ico, $vat, $invoice_items, 
-                                            $total_price); // creates xml
+                    $invoice_xml = RetrieveXml($invoice_id, $varSym, 
+                                               $date_inv, $date_inv, $date_inv, $date_inv, $date_inv,
+                                               $id, $description, $company_name, 
+                                               $full_name, $city, $address, $zip, $ico, $vat, $invoice_items, 
+                                               $total_price); // creates xml
 
                     $xmls += array($id => $invoice_xml);
             }
@@ -366,7 +374,13 @@
         ?>
 
         <form method="POST" action="">
-            <input type="month" name="date">
+            <label for="date">Měsíc</label>
+            <input type="date" name="date" id="date">
+
+            <br>
+
+            <label for="date-inv">Měsíc - faktura</label>
+            <input type="date" id="date-inv" name="date-inv">
             
             <br>
 

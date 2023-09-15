@@ -229,7 +229,7 @@
     // myfbo id = "CZ{$custId}"
     function GetICO_DIC($myfboId, $connection) // try to get ico & dic from pohoda_adresar
     {
-        $ico_dic = array("", "");
+        $ico_dic = array("", "", "");
 
         $sql = "SELECT * FROM system.pohoda_adresar WHERE VPrMyFboID = ?;";
         $stmt = $connection->prepare($sql);
@@ -244,7 +244,7 @@
         {
             $row = $result->fetch_assoc();
             
-            $ico_dic = array($row['ICO'], $row['DIC']);
+            $ico_dic = array($row['ICO'], $row['DIC'], $row['ID']);
         }
         else if($result->num_rows > 1)
         {
@@ -252,7 +252,7 @@
             while ($row = $result->fetch_assoc()) {
                 if ($row['DIC'] != "") {
                     $ico_dic_found = true;
-                    $ico_dic = array($row['ICO'], $row['DIC']);
+                    $ico_dic = array($row['ICO'], $row['DIC'], $row['ID']);
                     break;
                 }
             }
@@ -272,7 +272,7 @@
                     while ($row = $result->fetch_assoc()) {
                         if ($row['ICO'] != "") {
                             $ico_dic_found = true;
-                            $ico_dic = array($row['ICO'], $row['DIC']);
+                            $ico_dic = array($row['ICO'], $row['DIC'], $row['ID']);
                             break;
                         }
                     }
@@ -282,12 +282,12 @@
             }
 
 
-            return $ico_dic_found == true ? $ico_dic : array("", ""); // if ico & dic not found return empty array
+            return $ico_dic_found == true ? $ico_dic : array("", "", ""); // if ico & dic not found return empty array
         }
         else if($result->num_rows < 1)
         {
             echo "Error: no customer found for given id {$myfboId}<br>";
-            return array("", "");
+            return array("", "", "");
         }
 
         $stmt->close();

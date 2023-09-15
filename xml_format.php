@@ -3,7 +3,8 @@
 function RetrieveXml($invoice_id, $varSym, $invoice_created_d, $invoice_date, $invoice_acc_d, $dateKHDPH, $invoice_due_date, 
                      $custId, $description, $acc_company_name, $acc_full_name,
                      $acc_city, $acc_address, $acc_zip, $acc_ico, $acc_vat,
-                     $invoice_items, $total_price)
+                     $invoice_items, $total_price,
+                     $pohoda_adresar_id='')
 {
 // varsym = YEARMONTHID
 
@@ -128,8 +129,11 @@ function GetXmlItems($items)
 }
 
 
-function RetrieveInternalXml($year, $month, $custId, $date_c, $date_Tax, $date_Accounting, $date_KHDPH,
-                             $full_name, $city, $address, $total_price){
+function RetrieveInternalXml($year, $month, 
+                            $custId, 
+                            $date_c, $date_Tax, $date_Accounting, $date_KHDPH,
+                            $full_name, $city, $address, $total_price,
+                            $pohoda_adresar_id=''){
 
     $note = ""; // "Uživatelský export, Datum = Červen"; asi prazdne?
     $id = "INTERNAL {$year}-{$month}-{$custId}"; // "INTERNAL ROK-MESIC-ID"; "Usr01 (001)"
