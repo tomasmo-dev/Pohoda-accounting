@@ -39,10 +39,10 @@
             
             $invoice_type = $_POST['invoice_type'];
 
-            $date = DateTime::createFromFormat('m/d/Y', $_POST['date']); // <- input type date format
+            $date = DateTime::createFromFormat('Y-m-d', $_POST['date']); // <- input type date format
             //$date = DateTime::createFromFormat('Y-m', $_POST['date']); // <- this is type month format
 
-            $date_inv = DateTime::createFromFormat('m/d/Y', $_POST['date-inv']);
+            $date_inv = DateTime::createFromFormat('Y-m-d', $_POST['date-inv']);
             
             $month = $date->format('m');
             $year = $date->format('Y');
