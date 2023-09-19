@@ -43,6 +43,8 @@
             //$date = DateTime::createFromFormat('Y-m', $_POST['date']); // <- this is type month format
 
             $date_inv = DateTime::createFromFormat('Y-m-d', $_POST['date-inv']);
+
+            $date_inv = $date_inv->format('Y-m-d');
             
             $month = $date->format('m');
             $year = $date->format('Y');
