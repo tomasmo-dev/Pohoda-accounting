@@ -83,7 +83,7 @@
                 $invoice_d = DateTime::createFromFormat('Y-m-d', "{$year}-{$month}-1")->format('Y-m-t'); // first day of month
                 
                 $date_inv = $GLOBALS['date_inv']; // 2023-09-12 00:00:00.000
-                $date_inv = explode(" ", $date_inv)[0]; // 2023-09-12 - remove time from the date for pohoda
+                //$date_inv = explode(" ", $date_inv)[0]; // 2023-09-12 - remove time from the date for pohoda
 
 
                 // array of ico and dic from pohoda_adresar (if there is more than one, take first one) ->
