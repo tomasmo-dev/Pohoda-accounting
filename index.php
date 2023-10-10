@@ -153,7 +153,7 @@
 
                 // gets the invoice date from pohoda mssql server
                 $internal_inv_date = SelectVarsym($GLOBALS['ms_con'], $row['variable_symbol'], $balance, $total_price)['Datum'];
-
+                $internal_inv_date = explode(" ", $internal_inv_date)[0];
                     
                 if ($balance < 0 && abs($balance) > $internal_price)
                 {
